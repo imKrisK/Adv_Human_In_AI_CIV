@@ -6,6 +6,8 @@
     "dev": "next dev --hostname localhost",
     "build": "next build",
     "start": "next start",
+    "start:session-service": "next start --hostname localhost --port 4010",
+    "serve:session-service": "next build && next start --hostname localhost --port 4010",
     "lint": "eslint",
     "test:smoke": "playwright test",
     "db:generate": "prisma generate",

@@ -341,12 +341,15 @@ export type MissionSessionState = {
   members: MissionSessionMemberState[];
 };
 
-export type CommandDeckPhase =
-  | "arrival"
-  | "bonding"
-  | "briefing"
-  | "mission"
-  | "recovery";
+export const commandDeckPhases = [
+  "arrival",
+  "bonding",
+  "briefing",
+  "mission",
+  "recovery",
+] as const;
+
+export type CommandDeckPhase = (typeof commandDeckPhases)[number];
 
 export type PersistenceField = {
   key: keyof CommandDeckState;
@@ -385,7 +388,7 @@ export type CommandDeckState = {
   updatedAt: string | null;
 };
 
-export type TaskStatus = "Done" | "Next" | "Later";
+export type TaskStatus = "Done" | "In Progress" | "Next" | "Later";
 
 export type BacklogItem = {
   id: string;

@@ -10,6 +10,7 @@ import {
   type SessionServiceMissionEnvelope,
   type SessionServiceRetryStageRequest,
 } from "@/lib/session-service-contract";
+import { commandDeckPhases } from "@/lib/prototype-data";
 
 const browserRetryStageSchema = z.object({
   action: z.literal("retry-stage"),
@@ -19,7 +20,7 @@ const internalRetryStageSchema = z.object({
   userId: z.string().trim().min(1),
   profile: z.object({
     activeMissionSessionId: z.string().trim().min(1).nullable(),
-    phase: z.string().trim().min(1),
+    phase: z.enum(commandDeckPhases),
   }),
 });
 

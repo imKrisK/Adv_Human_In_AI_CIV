@@ -30,6 +30,7 @@ async function readMissionSessionEnvelope(response: Response) {
   return {
     missionSession: data.missionSession ?? null,
     message: typeof data.message === "string" ? data.message : undefined,
+    source: "session-service",
   } satisfies SessionServiceMissionEnvelope;
 }
 

@@ -10,6 +10,7 @@ import {
   type SessionServiceAdvanceStageRequest,
   type SessionServiceMissionEnvelope,
 } from "@/lib/session-service-contract";
+import { commandDeckPhases } from "@/lib/prototype-data";
 
 const browserAdvanceStageSchema = z.object({
   action: z.literal("advance-stage"),
@@ -19,7 +20,7 @@ const internalAdvanceStageSchema = z.object({
   userId: z.string().trim().min(1),
   profile: z.object({
     activeMissionSessionId: z.string().trim().min(1).nullable(),
-    phase: z.string().trim().min(1),
+    phase: z.enum(commandDeckPhases),
   }),
 });
 

@@ -109,7 +109,7 @@ jobs:
       FLY_WORKER_APP_NAME: adv-human-ai-civ-workers
       FLY_PRIMARY_REGION: iad
       SESSION_SERVICE_MODE: external-runtime
-      SESSION_SERVICE_BASE_URL: ${{ secrets.SESSION_SERVICE_BASE_URL != '' && secrets.SESSION_SERVICE_BASE_URL || 'http://localhost:3000' }}
+      SESSION_SERVICE_BASE_URL: ${{ secrets.SESSION_SERVICE_BASE_URL != '' && secrets.SESSION_SERVICE_BASE_URL || 'http://localhost:4010' }}
       SESSION_SERVICE_INTERNAL_TOKEN: ${{ secrets.SESSION_SERVICE_INTERNAL_TOKEN != '' && secrets.SESSION_SERVICE_INTERNAL_TOKEN || 'smoke-session-service-token' }}
       SESSION_SERVICE_COORDINATION_MODE: redis-upstash
       UPSTASH_REDIS_REST_URL: https://example.upstash.io
@@ -128,7 +128,7 @@ jobs:
       SENTRY_ORG: smoke-org
       SENTRY_PROJECT: adv-human-ai-civ
       HOSTED_POSTGRES_SOURCE: ${{ secrets.POSTGRES_DATABASE_URL != '' && 'github-secret' || 'workflow-service' }}
-      HOSTED_SESSION_SERVICE_SOURCE: ${{ secrets.SESSION_SERVICE_BASE_URL != '' && 'github-secret' || 'workflow-self-proxy' }}
+      HOSTED_SESSION_SERVICE_SOURCE: ${{ secrets.SESSION_SERVICE_BASE_URL != '' && 'github-secret' || 'workflow-dedicated-runtime' }}
       SMOKE_RUNTIME_MODE: hosted-candidate
       SMOKE_RUNTIME_MODE_SOURCE: env
       SMOKE_AUTH_MODE: ${{ secrets.CLERK_SECRET_KEY != '' && secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY != '' && 'clerk-testing' || 'local-demo' }}

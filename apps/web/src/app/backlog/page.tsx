@@ -25,6 +25,7 @@ const balanceStatusLabel = {
 
 const statusClassName = {
   Done: "status-chip status-done",
+  "In Progress": "status-chip status-next",
   Next: "status-chip status-next",
   Later: "status-chip status-later",
 } as const;

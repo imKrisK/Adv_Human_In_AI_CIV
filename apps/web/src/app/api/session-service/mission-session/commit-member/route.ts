@@ -10,6 +10,7 @@ import {
   type SessionServiceCommitMemberRequest,
   type SessionServiceMissionEnvelope,
 } from "@/lib/session-service-contract";
+import { commandDeckPhases } from "@/lib/prototype-data";
 
 const browserCommitMemberSchema = z.object({
   action: z.literal("commit-member"),
@@ -19,7 +20,7 @@ const internalCommitMemberSchema = z.object({
   userId: z.string().trim().min(1),
   profile: z.object({
     activeMissionSessionId: z.string().trim().min(1).nullable(),
-    phase: z.string().trim().min(1),
+    phase: z.enum(commandDeckPhases),
   }),
 });
 
