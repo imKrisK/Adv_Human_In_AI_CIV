@@ -1,0 +1,15 @@
+\#\# GitHub Copilot Chat.md
+.repo-backups/
+.vscode/
+game sample.png
+Screenshot 2026-05-30 100414.png
+Screenshot 2026-05-30 101107.png
+docs/20090209EudemonsV1167.exe
+
+apps/web/.git/
+apps/web/.env
+apps/web/.env.*
+apps/web/dev.db
+apps/web/node_modules/
+apps/web/.next/
+apps/web/test-results/

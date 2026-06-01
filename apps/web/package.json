@@ -1,0 +1,43 @@
+{
+  "name": "web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --hostname localhost",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "test:smoke": "playwright test",
+    "db:generate": "prisma generate",
+    "db:generate:postgres": "prisma generate --config prisma.postgres.config.ts",
+    "db:push": "prisma db push && prisma generate",
+    "db:push:postgres": "prisma db push --config prisma.postgres.config.ts --skip-generate && npm run db:generate:postgres",
+    "db:validate:postgres": "prisma validate --config prisma.postgres.config.ts",
+    "db:migrate:postgres:create": "prisma migrate dev --config prisma.postgres.config.ts --create-only --skip-generate",
+    "db:migrate:postgres:deploy": "prisma migrate deploy --config prisma.postgres.config.ts"
+  },
+  "dependencies": {
+    "@clerk/nextjs": "^7.4.2",
+    "@prisma/adapter-better-sqlite3": "^7.8.0",
+    "@prisma/client": "^7.8.0",
+    "bcryptjs": "^3.0.3",
+    "better-sqlite3": "^12.10.0",
+    "next": "16.2.6",
+    "prisma": "^7.8.0",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@clerk/testing": "^2.0.34",
+    "@playwright/test": "^1.60.0",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.6",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}

@@ -1,0 +1,177 @@
+name: Web Smoke
+
+on:
+  push:
+    paths:
+      - .github/workflows/web-smoke.yml
+      - src/**
+      - tests/**
+      - prisma/**
+      - public/**
+      - package.json
+      - package-lock.json
+      - playwright.config.ts
+      - next.config.ts
+      - prisma.config.ts
+      - tsconfig.json
+      - eslint.config.mjs
+      - postcss.config.mjs
+      - next-env.d.ts
+  pull_request:
+    paths:
+      - .github/workflows/web-smoke.yml
+      - src/**
+      - tests/**
+      - prisma/**
+      - public/**
+      - package.json
+      - package-lock.json
+      - playwright.config.ts
+      - next.config.ts
+      - prisma.config.ts
+      - tsconfig.json
+      - eslint.config.mjs
+      - postcss.config.mjs
+      - next-env.d.ts
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: file:./dev.db
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Sync SQLite schema
+        run: npm run db:push
+
+      - name: Run smoke suite
+        run: npm run test:smoke
+
+      - name: Upload Playwright artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-smoke-artifacts
+          path: |
+            playwright-report
+            test-results
+
+  smoke-hosted-candidate:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: adv_human_ai_civ
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d adv_human_ai_civ"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      APP_RUNTIME_MODE: hosted-candidate
+      NODE_ENV: development
+      NEXT_PUBLIC_APP_URL: http://localhost:3000
+      DATABASE_URL: ${{ secrets.POSTGRES_DATABASE_URL != '' && secrets.POSTGRES_DATABASE_URL || 'postgresql://postgres:postgres@127.0.0.1:5432/adv_human_ai_civ?schema=public' }}
+      DIRECT_DATABASE_URL: ${{ secrets.POSTGRES_DIRECT_DATABASE_URL != '' && secrets.POSTGRES_DIRECT_DATABASE_URL || secrets.POSTGRES_DATABASE_URL != '' && secrets.POSTGRES_DATABASE_URL || 'postgresql://postgres:postgres@127.0.0.1:5432/adv_human_ai_civ?schema=public' }}
+      POSTGRES_DATABASE_URL: ${{ secrets.POSTGRES_DATABASE_URL != '' && secrets.POSTGRES_DATABASE_URL || 'postgresql://postgres:postgres@127.0.0.1:5432/adv_human_ai_civ?schema=public' }}
+      POSTGRES_DIRECT_DATABASE_URL: ${{ secrets.POSTGRES_DIRECT_DATABASE_URL != '' && secrets.POSTGRES_DIRECT_DATABASE_URL || secrets.POSTGRES_DATABASE_URL != '' && secrets.POSTGRES_DATABASE_URL || 'postgresql://postgres:postgres@127.0.0.1:5432/adv_human_ai_civ?schema=public' }}
+      CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY }}
+      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}
+      CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}
+      NEXT_PUBLIC_CLERK_SIGN_IN_URL: ${{ secrets.CLERK_SECRET_KEY != '' && '/sign-in' || '' }}
+      NEXT_PUBLIC_CLERK_SIGN_UP_URL: ${{ secrets.CLERK_SECRET_KEY != '' && '/sign-up' || '' }}
+      FLY_REALTIME_APP_NAME: adv-human-ai-civ-realtime
+      FLY_WORKER_APP_NAME: adv-human-ai-civ-workers
+      FLY_PRIMARY_REGION: iad
+      SESSION_SERVICE_MODE: external-runtime
+      SESSION_SERVICE_BASE_URL: ${{ secrets.SESSION_SERVICE_BASE_URL != '' && secrets.SESSION_SERVICE_BASE_URL || 'http://localhost:3000' }}
+      SESSION_SERVICE_INTERNAL_TOKEN: ${{ secrets.SESSION_SERVICE_INTERNAL_TOKEN != '' && secrets.SESSION_SERVICE_INTERNAL_TOKEN || 'smoke-session-service-token' }}
+      SESSION_SERVICE_COORDINATION_MODE: redis-upstash
+      UPSTASH_REDIS_REST_URL: https://example.upstash.io
+      UPSTASH_REDIS_REST_TOKEN: smoke-upstash-token
+      R2_ACCOUNT_ID: smoke-r2-account
+      R2_BUCKET: adv-human-ai-civ-assets
+      R2_ACCESS_KEY_ID: smoke-r2-key
+      R2_SECRET_ACCESS_KEY: smoke-r2-secret
+      R2_PUBLIC_BASE_URL: https://assets.example.com
+      NEXT_PUBLIC_POSTHOG_KEY: phc_smoke_placeholder
+      NEXT_PUBLIC_POSTHOG_HOST: https://us.i.posthog.com
+      POSTHOG_PROJECT_API_KEY: smoke-posthog-api-key
+      SENTRY_DSN: https://public@example.ingest.sentry.io/1
+      NEXT_PUBLIC_SENTRY_DSN: https://public@example.ingest.sentry.io/1
+      SENTRY_AUTH_TOKEN: smoke-sentry-token
+      SENTRY_ORG: smoke-org
+      SENTRY_PROJECT: adv-human-ai-civ
+      HOSTED_POSTGRES_SOURCE: ${{ secrets.POSTGRES_DATABASE_URL != '' && 'github-secret' || 'workflow-service' }}
+      HOSTED_SESSION_SERVICE_SOURCE: ${{ secrets.SESSION_SERVICE_BASE_URL != '' && 'github-secret' || 'workflow-self-proxy' }}
+      SMOKE_RUNTIME_MODE: hosted-candidate
+      SMOKE_RUNTIME_MODE_SOURCE: env
+      SMOKE_AUTH_MODE: ${{ secrets.CLERK_SECRET_KEY != '' && secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY != '' && 'clerk-testing' || 'local-demo' }}
+      SMOKE_ENV_GATE: ${{ secrets.CLERK_SECRET_KEY != '' && secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY != '' && 'pass' || 'fail' }}
+      SMOKE_ENV_API_STATUS: ${{ secrets.CLERK_SECRET_KEY != '' && secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY != '' && '200' || '503' }}
+      SMOKE_EXPECT_CONTRACT_READY: ${{ secrets.CLERK_SECRET_KEY != '' && secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY != '' && 'true' || 'false' }}
+      SMOKE_EXPECT_INVALID_DATABASE_URL: "false"
+      SMOKE_EXPECT_MISSING_ENV_KEY: ${{ secrets.CLERK_SECRET_KEY != '' && secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY != '' && '' || 'CLERK_SECRET_KEY' }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Report Postgres source
+        run: echo "Hosted-candidate smoke using $HOSTED_POSTGRES_SOURCE"
+
+      - name: Report session-service source
+        run: echo "Hosted-candidate smoke using $HOSTED_SESSION_SERVICE_SOURCE at $SESSION_SERVICE_BASE_URL"
+
+      - name: Sync Postgres schema and generate hosted client
+        run: npm run db:push:postgres
+
+      - name: Run hosted-candidate smoke suite
+        run: npm run test:smoke
+
+      - name: Upload Playwright artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-smoke-hosted-candidate-artifacts
+          path: |
+            playwright-report
+            test-results

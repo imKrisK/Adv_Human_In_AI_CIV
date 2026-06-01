@@ -1,0 +1,145 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id           String        @id @default(cuid())
+  email        String        @unique
+  hostedIdentityId String?   @unique
+  passwordHash String
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  sessions     Session[]
+  missionSessionMembers MissionSessionMember[]
+  profile      PlayerProfile?
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  tokenHash String   @unique
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model TelemetryEvent {
+  id          String   @id @default(cuid())
+  userId      String?
+  eventType   String
+  phase       String?
+  missionId   String?
+  contextJson String?
+  createdAt   DateTime @default(now())
+
+  @@index([userId])
+  @@index([eventType])
+  @@index([phase])
+  @@index([missionId])
+  @@index([createdAt])
+}
+
+model PlayerProfile {
+  id                     String   @id @default(cuid())
+  userId                 String   @unique
+  phase                  String
+  selectedLoadoutId      String
+  selectedCompanionId    String
+  selectedMissionId      String
+  activeMissionSessionId String?
+  squadSessionId         String?
+  squadCode              String?
+  squadRole              String?
+  squadLocked            Boolean  @default(false)
+  squadReady             Boolean  @default(false)
+  explorerRank           Int      @default(1)
+  humanLevel             Int      @default(1)
+  aiTier                 Int      @default(1)
+  resonanceLevel         Int      @default(1)
+  factionStanding        Int      @default(0)
+  lastCompletedMissionId String?
+  lastEventMissionId     String?
+  lastEventWindowId      String?
+  lastEventRewardBandId  String?
+  lastEventTotalScore    Int?
+  lastEventDefenseContribution Int?
+  lastEventSupportContribution Int?
+  lastEventCompletionContribution Int?
+  lastEventCompletedAt   DateTime?
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+  user                   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([selectedMissionId])
+  @@index([activeMissionSessionId])
+  @@index([squadSessionId])
+}
+
+model SquadSession {
+  id               String   @id @default(cuid())
+  code             String   @unique
+  status           String   @default("staging")
+  selectedMissionId String
+  hostUserId       String
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([hostUserId])
+  @@index([selectedMissionId])
+}
+
+model MissionSession {
+  id               String               @id @default(cuid())
+  missionId        String
+  squadSessionId   String?
+  launchedByUserId String
+  status           String               @default("active")
+  eventWindowId    String?
+  stageIndex       Int                  @default(0)
+  combatStateJson  String?
+  launchedAt       DateTime             @default(now())
+  completedAt      DateTime?
+  abandonedAt      DateTime?
+  createdAt        DateTime             @default(now())
+  updatedAt        DateTime             @updatedAt
+  members          MissionSessionMember[]
+
+  @@index([missionId])
+  @@index([squadSessionId])
+  @@index([launchedByUserId])
+}
+
+model MissionSessionMember {
+  id                    String        @id @default(cuid())
+  missionSessionId      String
+  userId                String
+  squadRole             String
+  selectedLoadoutId     String
+  selectedCompanionId   String
+  status                String        @default("deployed")
+  eventDefenseContribution   Int      @default(0)
+  eventSupportContribution   Int      @default(0)
+  eventCompletionContribution Int     @default(0)
+  rewardExplorerRank    Int           @default(0)
+  rewardHumanLevel      Int           @default(0)
+  rewardAiTier          Int           @default(0)
+  rewardResonanceLevel  Int           @default(0)
+  rewardFactionStanding Int           @default(0)
+  completedAt           DateTime?
+  rewardsCommittedAt    DateTime?
+  createdAt             DateTime      @default(now())
+  updatedAt             DateTime      @updatedAt
+  missionSession        MissionSession @relation(fields: [missionSessionId], references: [id], onDelete: Cascade)
+  user                  User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([missionSessionId, userId])
+  @@index([userId])
+  @@index([status])
+}

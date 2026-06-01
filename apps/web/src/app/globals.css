@@ -1,0 +1,122 @@
+@import "tailwindcss";
+
+:root {
+  --background: #eef3f0;
+  --foreground: #152534;
+  --surface: rgba(255, 250, 242, 0.8);
+  --surface-strong: #fffaf0;
+  --muted: #4d6272;
+  --line: rgba(21, 37, 52, 0.14);
+  --accent-teal: #0d7a7a;
+  --accent-ember: #d96c3d;
+  --accent-gold: #c29545;
+  --shadow: rgba(21, 37, 52, 0.12);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-oxanium);
+  --font-mono: var(--font-plex-mono);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  background-image:
+    radial-gradient(circle at 15% 20%, rgba(141, 216, 232, 0.55), transparent 28%),
+    radial-gradient(circle at 85% 0%, rgba(217, 108, 61, 0.18), transparent 24%),
+    linear-gradient(180deg, #faf3e8 0%, #eef3f0 48%, #e6edf1 100%);
+  font-family: var(--font-oxanium), sans-serif;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: linear-gradient(rgba(21, 37, 52, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(21, 37, 52, 0.03) 1px, transparent 1px);
+  background-size: 36px 36px;
+  mask-image: radial-gradient(circle at center, black 45%, transparent 95%);
+  pointer-events: none;
+  opacity: 0.45;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+::selection {
+  background: rgba(13, 122, 122, 0.2);
+}
+
+.main-shell {
+  width: min(1120px, calc(100% - 2rem));
+  margin: 0 auto;
+}
+
+.glass-panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: 0 24px 64px var(--shadow);
+  backdrop-filter: blur(18px);
+}
+
+.section-kicker {
+  font-family: var(--font-plex-mono), monospace;
+  font-size: 0.74rem;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--accent-teal);
+}
+
+.section-title {
+  font-size: clamp(2rem, 3vw, 3.75rem);
+  line-height: 1;
+}
+
+.muted-copy {
+  color: var(--muted);
+}
+
+.data-chip {
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 999px;
+  padding: 0.45rem 0.8rem;
+}
+
+.status-chip {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.72rem;
+  font-family: var(--font-plex-mono), monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.status-done {
+  background: rgba(35, 148, 96, 0.14);
+  color: #16603c;
+}
+
+.status-next {
+  background: rgba(194, 149, 69, 0.16);
+  color: #7d4f10;
+}
+
+.status-later {
+  background: rgba(21, 37, 52, 0.1);
+  color: #314454;
+}
