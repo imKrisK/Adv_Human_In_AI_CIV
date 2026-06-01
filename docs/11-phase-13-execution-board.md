@@ -42,7 +42,7 @@ P13-10 remains the cross-workstream exit review that closes the phase only after
 | P13-04 Hosted identity integration | In Progress | Day 3-5 | P13-01 | Backend + Web | Hosted auth routes, callback sync, and guards are implemented locally; staged Clerk validation is still pending. |
 | P13-05 Hosted env gate enforcement | In Progress | Day 5 | P13-02, P13-04 | Platform | Promotion gate blocks missing or invalid hosted contract variables. |
 | P13-06 Hosted-candidate CI smoke lane | In Progress | Day 6-7 | P13-03, P13-05 | Platform + QA | CI requires local smoke and hosted-candidate smoke checks. |
-| P13-07 First session-service runtime extraction | In Progress | Day 7-8 | P13-06 | Backend | Session-service skeleton now exposes a health endpoint and shared squad authority helpers; external runtime extraction and one full session operation remain open. |
+| P13-07 First session-service runtime extraction | In Progress (local boundary validated) | Day 7-8 | P13-06 | Backend | Session-service health plus launch, abandon, combat-action, advance-stage, retry-stage, and commit-member routes are extracted and locally validated in embedded and external-runtime rehearsal modes; staged dedicated-runtime deployment remains open. |
 | P13-08 Observability baseline activation | Next | Day 8-9 | P13-06 | Platform + Backend | PostHog and Sentry receive staged release-tagged traffic and errors. |
 | P13-09 Minimum live-ops event config path | Next | Day 9 | P13-07 | Backend + Live Ops | Event timing or modifier values update in staging without redeploy. |
 | P13-10 Exit review and go/no-go | Next | Day 10 | P13-01..P13-09 | Product + Tech Lead | Evidence pack and Phase 14 intake decision. |
@@ -91,7 +91,7 @@ Current status: the local smoke lane is stable again after standardizing dev and
 
 ### P13-07 First session-service runtime extraction
 
-Current status: `src/lib/session-service.ts` now owns the extracted squad authority helpers plus the current-mission read logic used by the new `/api/session-service/mission-session/current` surface. `/api/session-service/health` now reports a green embedded-web plus inline-local contract in local prototype mode, while hosted-candidate mode can still surface the external runtime and Redis requirements explicitly. The dedicated external session runtime and the first non-read session operation remain open.
+Current status: `src/lib/session-service.ts` now owns the extracted squad authority helpers plus the mission-session read and write logic used by the dedicated `/api/session-service/mission-session/*` surfaces. `/api/session-service/health` reports the active contract in local prototype mode, while the local external-runtime rehearsal path now exercises launch, abandon, combat-action, advance-stage, retry-stage, and commit-member through the shared client boundary. Existing retry-stage and Ash Circuit reward smokes stay green in both embedded and external-runtime self-proxy modes, so the remaining open work is the staged dedicated-runtime deployment rather than local route extraction.
 
 1. Extracted service is deployed and reachable by health check.
 2. One session operation runs through the service boundary end-to-end.

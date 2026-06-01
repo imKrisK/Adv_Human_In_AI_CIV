@@ -225,15 +225,20 @@ Day window: Day 5
 
 Dependencies: P13-02, P13-04
 
-Status: In Progress (failure-path gate enforcement is live; full pass-case evidence still pending)
+Status: In Progress (failure path and local pass-case evidence are live; real hosted secret rollout is still pending)
 
 Summary:
 Turn environment contract checks into promotion gates for hosted-candidate pipelines.
 
 Implementation checklist:
 - [x] Fail gate on missing or invalid hosted contract keys.
-- [ ] Pass gate when hosted contract is complete.
+- [x] Pass gate when hosted contract is complete.
 - [x] Expose gate status in CI and API responses.
+
+Current evidence:
+1. Failure-path gate enforcement is live through the environment-contract route and CI-facing output.
+2. A local hosted-candidate boot with a syntactically complete provider contract returned `STATUS_CODE:200`, `GATE_STATUS:pass`, `CONTRACT_READY:True`, `MISSING_COUNT:0`, and `INVALID_COUNT:0` from `/api/environment-contract`.
+3. Real hosted secret-store rollout and staged provider wiring are still pending, so the ticket remains in progress.
 
 Acceptance criteria:
 1. Missing or invalid contract keys block hosted-candidate promotion.
@@ -298,13 +303,20 @@ Day window: Day 7-8
 
 Dependencies: P13-06
 
+Status: In Progress (local boundary extracted and validated; staged dedicated-runtime deployment still pending)
+
 Summary:
-Extract first mission or squad session authority path into deployed service runtime boundary.
+Extract mission-session authority into the session-service boundary locally first, then finish the staged dedicated-runtime deployment.
 
 Implementation checklist:
-- [ ] Deploy service skeleton with health endpoint.
-- [ ] Route one session operation through service boundary.
-- [ ] Validate failure behavior and state integrity.
+- [ ] Deploy dedicated service skeleton with health endpoint in staging.
+- [x] Route one session operation through service boundary.
+- [x] Validate failure behavior and state integrity.
+
+Current evidence:
+1. `/api/session-service/health` reports the session-service contract and mode.
+2. Launch, abandon, combat-action, advance-stage, retry-stage, and commit-member now flow through dedicated session-service routes.
+3. The existing retry-stage and Ash Circuit reward smokes pass in both embedded-web mode and the local external-runtime self-proxy path, covering mutation success plus recovery behavior without state regression.
 
 Acceptance criteria:
 1. Service runtime is deployed and health-checked.
