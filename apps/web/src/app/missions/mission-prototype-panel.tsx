@@ -211,9 +211,18 @@ export default function MissionPrototypePanel({
             ? sessionServiceRoutes.advanceStage
             : body.action === "retry-stage"
               ? sessionServiceRoutes.retryStage
-          : body.action === "abandon"
-            ? sessionServiceRoutes.abandonMission
-            : "/api/mission-session";
+              : body.action === "commit-member"
+                ? sessionServiceRoutes.commitMember
+                : body.action === "abandon"
+                  ? sessionServiceRoutes.abandonMission
+                  : null;
+
+      if (!route) {
+        setMissionSessionError(
+          "Mission action is no longer routed through the legacy mission-session alias.",
+        );
+        return false;
+      }
 
       const response = await fetch(route, {
         method: "POST",

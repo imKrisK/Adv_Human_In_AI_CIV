@@ -694,7 +694,7 @@ export const serviceBoundaries: ServiceBoundary[] = [
     id: "match-session",
     name: "Match / Session Service",
     currentImplementation:
-      "Current prototype coverage lives in /api/squad and /api/mission-session inside the web app.",
+      "Current prototype coverage lives in /api/squad and the in-app /api/session-service mission routes.",
     targetRuntime:
       "Dedicated realtime session runtime with the web app acting as launch and recovery control plane.",
     responsibilities: [

@@ -16,6 +16,7 @@ export const sessionServiceRoutes = {
   combatAction: "/api/session-service/mission-session/combat-action",
   advanceStage: "/api/session-service/mission-session/advance-stage",
   retryStage: "/api/session-service/mission-session/retry-stage",
+  commitMember: "/api/session-service/mission-session/commit-member",
 } as const;
 
 export const sessionServiceModeEnvKey = "SESSION_SERVICE_MODE";
@@ -63,6 +64,9 @@ export type SessionServiceAdvanceStageRequest =
   SessionServiceCurrentMissionRequest;
 
 export type SessionServiceRetryStageRequest =
+  SessionServiceCurrentMissionRequest;
+
+export type SessionServiceCommitMemberRequest =
   SessionServiceCurrentMissionRequest;
 
 export type SessionServiceCombatActionRequest =

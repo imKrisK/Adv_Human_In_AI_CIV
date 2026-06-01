@@ -7,6 +7,7 @@ import {
 } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import {
+  applyMissionCompletion,
   advanceEncounterState,
   createEncounterState,
   executeCombatAction,
@@ -15,6 +16,7 @@ import {
   isMissionUnlocked,
   resolveCombatContributionDelta,
   resolveEventContributionState,
+  resolveMissionRewardPayload,
   type CombatActionId,
   type EventContributionTotals,
 } from "@/lib/playable-slice";
@@ -74,6 +76,8 @@ export type MissionSessionCombatActionContext = MissionSessionContext & {
 export type MissionSessionAdvanceStageContext = MissionSessionContext;
 
 export type MissionSessionRetryStageContext = MissionSessionContext;
+
+export type MissionSessionCommitMemberContext = MissionSessionContext;
 
 export type SessionServiceHealth = {
   service: "session-service-skeleton";
@@ -1148,6 +1152,185 @@ export async function retryMissionSessionStage(
   return {
     missionSession: await readMissionSessionState(missionSession.id),
     message: "Shared stage reset. The squad can re-enter the lane.",
+    status: 200,
+  };
+}
+
+export async function commitMissionSessionMember(
+  context: MissionSessionCommitMemberContext,
+): Promise<SessionServiceMissionRouteResult> {
+  const resolved = await resolveActiveMissionSessionForMutation(context);
+
+  if (!resolved.ok) {
+    return resolved.result;
+  }
+
+  const { missionSession, currentMember } = resolved;
+  const eventWindowId = normalizeEventWindowId(
+    missionSession.missionId,
+    missionSession.eventWindowId,
+  );
+
+  if (currentMember.rewardsCommittedAt) {
+    return {
+      missionSession: await readMissionSessionState(missionSession.id),
+      message: "Rewards were already committed for this operator.",
+      status: 200,
+    };
+  }
+
+  const mission = getMissionFlow(missionSession.missionId, eventWindowId);
+
+  if (!mission) {
+    return {
+      missionSession: null,
+      message: "Mission rewards could not be resolved for this session.",
+      status: 500,
+    };
+  }
+
+  const combatState = readCombatState(
+    missionSession.missionId,
+    missionSession.stageIndex,
+    missionSession.combatStateJson,
+    eventWindowId,
+  );
+  const contribution = readMissionSessionMemberContribution(currentMember);
+  const eventContribution = resolveEventContributionState(
+    missionSession.missionId,
+    eventWindowId,
+    contribution,
+  );
+  const rewardPayload = resolveMissionRewardPayload(
+    missionSession.missionId,
+    eventWindowId,
+    contribution,
+  );
+
+  if (
+    missionSession.stageIndex !== mission.stages.length - 1 ||
+    !combatState.stageComplete ||
+    combatState.playerDown
+  ) {
+    return {
+      missionSession: await readMissionSessionState(missionSession.id),
+      message: "Secure the final shared lane before committing mission rewards.",
+      status: 409,
+    };
+  }
+
+  const committedAt = new Date();
+  const pairing = getPairingForProfile({
+    selectedLoadoutId: currentMember.selectedLoadoutId,
+    selectedCompanionId: currentMember.selectedCompanionId,
+  });
+
+  await prisma.$transaction(async (tx) => {
+    const currentProfileRecord = await tx.playerProfile.findUnique({
+      where: { userId: context.userId },
+    });
+
+    if (!currentProfileRecord) {
+      throw new Error("Mission reward commit requires an existing operator profile.");
+    }
+
+    const currentProfile = profileRecordToState(currentProfileRecord);
+    const nextProfile = normalizeCommandDeckState({
+      ...applyMissionCompletion(
+        currentProfile,
+        missionSession.missionId,
+        rewardPayload,
+        eventWindowId,
+      ),
+      activeMissionSessionId: null,
+      squadLocked: false,
+      squadReady: false,
+      lastEventResult:
+        eventContribution && eventWindowId
+          ? {
+              missionId: missionSession.missionId,
+              eventWindowId,
+              rewardBandId: eventContribution.rewardBand.id,
+              totalScore: eventContribution.totalScore,
+              defenseContribution: contribution.defense,
+              supportContribution: contribution.support,
+              completionContribution: contribution.completion,
+              completedAt: committedAt.toISOString(),
+            }
+          : currentProfile.lastEventResult,
+    });
+
+    await tx.missionSessionMember.update({
+      where: {
+        missionSessionId_userId: {
+          missionSessionId: missionSession.id,
+          userId: context.userId,
+        },
+      },
+      data: {
+        status: missionSessionMemberStatuses[1],
+        rewardExplorerRank: rewardPayload.explorerRank,
+        rewardHumanLevel: rewardPayload.humanLevel,
+        rewardAiTier: rewardPayload.aiTier,
+        rewardResonanceLevel: rewardPayload.resonanceLevel,
+        rewardFactionStanding: rewardPayload.factionStanding,
+        completedAt: committedAt,
+        rewardsCommittedAt: committedAt,
+      },
+    });
+
+    await tx.playerProfile.update({
+      where: { userId: context.userId },
+      data: profileStateToRecordInput(nextProfile),
+    });
+
+    const pendingMembers = await tx.missionSessionMember.count({
+      where: {
+        missionSessionId: missionSession.id,
+        rewardsCommittedAt: null,
+      },
+    });
+
+    if (pendingMembers === 0) {
+      await tx.missionSession.update({
+        where: { id: missionSession.id },
+        data: {
+          status: missionSessionStatuses[1],
+          completedAt: committedAt,
+        },
+      });
+    }
+  });
+
+  await recordTelemetryEvents([
+    {
+      userId: context.userId,
+      eventType: "mission_completed",
+      phase: "recovery",
+      missionId: missionSession.missionId,
+      context: {
+        pairingId: pairing.id,
+        rewardBandId: eventContribution?.rewardBand.id ?? null,
+        totalScore: eventContribution?.totalScore ?? null,
+        missionSessionId: missionSession.id,
+        finalIntegrity: combatState.playerIntegrity,
+      },
+    },
+    {
+      userId: context.userId,
+      eventType: "phase_reached",
+      phase: "recovery",
+      missionId: missionSession.missionId,
+      context: {
+        fromPhase: context.profile.phase,
+        rewardBandId: eventContribution?.rewardBand.id ?? null,
+      },
+    },
+  ]);
+
+  return {
+    missionSession: await readMissionSessionState(missionSession.id),
+    message: "Mission rewards committed to this operator.",
     status: 200,
   };
 }

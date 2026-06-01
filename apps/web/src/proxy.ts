@@ -10,7 +10,6 @@ const isHostedProtectedRoute = createRouteMatcher([
   "/auth/complete(.*)",
   "/api/profile(.*)",
   "/api/squad(.*)",
-  "/api/mission-session(.*)",
   "/api/session-service(.*)",
   "/api/playtest(.*)",
 ]);

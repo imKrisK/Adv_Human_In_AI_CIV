@@ -28,6 +28,7 @@ Player-facing prototype shell for Adventure of Human in AI Civilization.
 - `/api/session-service/mission-session/combat-action` - dedicated live combat write surface for the extracted session-service boundary
 - `/api/session-service/mission-session/advance-stage` - dedicated shared-objective progression surface for the extracted session-service boundary
 - `/api/session-service/mission-session/retry-stage` - dedicated stage-reset surface for the extracted session-service boundary
+- `/api/session-service/mission-session/commit-member` - dedicated reward-commit surface for the extracted session-service boundary
 
 ## Commands
 

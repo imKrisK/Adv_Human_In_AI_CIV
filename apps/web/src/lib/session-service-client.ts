@@ -2,6 +2,7 @@ import {
   abandonMissionSession,
   advanceMissionSessionStage,
   applyCombatActionToMissionSession,
+  commitMissionSessionMember,
   launchMissionSession,
   readCurrentMissionSession,
   readSessionServiceHealth,
@@ -12,6 +13,7 @@ import {
   type SessionServiceAbandonMissionRequest,
   type SessionServiceAdvanceStageRequest,
   type SessionServiceCombatActionRequest,
+  type SessionServiceCommitMemberRequest,
   readSessionServiceInternalToken,
   resolveSessionServiceConfig,
   sessionServiceInternalTokenHeader,
@@ -162,6 +164,18 @@ export async function retryMissionSessionStageFromService(
   }
 
   return postToExternalSessionService(sessionServiceRoutes.retryStage, request);
+}
+
+export async function commitMissionSessionMemberFromService(
+  request: SessionServiceCommitMemberRequest,
+): Promise<SessionServiceMissionRouteResult> {
+  const config = resolveSessionServiceConfig();
+
+  if (config.mode === "embedded-web") {
+    return commitMissionSessionMember(request);
+  }
+
+  return postToExternalSessionService(sessionServiceRoutes.commitMember, request);
 }
 
 export async function readSessionServiceHealthFromService(): Promise<SessionServiceHealth> {
