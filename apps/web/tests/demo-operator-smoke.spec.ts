@@ -27,9 +27,53 @@ const smokeExpectedMissingEnvKey =
   process.env.SMOKE_EXPECT_MISSING_ENV_KEY ??
   (smokeExpectContractReady ? "" : "CLERK_SECRET_KEY");
 
+function isSmokePlaceholderValue(value: string | undefined) {
+  return typeof value === "string" && /replace_me|placeholder|example|smoke/i.test(value);
+}
+
+function resolveSmokeObservabilityAnalyticsMode() {
+  const host = process.env.NEXT_PUBLIC_POSTHOG_HOST;
+  const key = process.env.NEXT_PUBLIC_POSTHOG_KEY ?? process.env.POSTHOG_PROJECT_API_KEY;
+
+  if (!host || !key) {
+    return "missing" as const;
+  }
+
+  return isSmokePlaceholderValue(host) || isSmokePlaceholderValue(key)
+    ? ("placeholder" as const)
+    : ("active" as const);
+}
+
+function resolveSmokeObservabilityErrorMode() {
+  const dsn = process.env.SENTRY_DSN;
+  const org = process.env.SENTRY_ORG;
+  const project = process.env.SENTRY_PROJECT;
+
+  if (!dsn || !org || !project) {
+    return "missing" as const;
+  }
+
+  return isSmokePlaceholderValue(dsn) ||
+    isSmokePlaceholderValue(org) ||
+    isSmokePlaceholderValue(project)
+    ? ("placeholder" as const)
+    : ("active" as const);
+}
+
+const smokeExpectedObservabilityAnalyticsMode =
+  process.env.SMOKE_EXPECT_OBSERVABILITY_ANALYTICS_MODE ??
+  resolveSmokeObservabilityAnalyticsMode();
+const smokeExpectedObservabilityErrorMode =
+  process.env.SMOKE_EXPECT_OBSERVABILITY_ERROR_MODE ??
+  resolveSmokeObservabilityErrorMode();
+
 async function lockPairAndReady(page: Page) {
   await page.getByTestId("toggle-squad-lock").click();
+  // Wait for the lock API to commit before clicking ready
+  await expect(page.getByTestId("toggle-squad-ready")).toBeEnabled();
   await page.getByTestId("toggle-squad-ready").click();
+  // Wait for the ready API to commit before returning
+  await expect(page.getByTestId("toggle-squad-ready")).toBeEnabled();
 }
 
 async function readProfileSnapshotValue(page: Page, label: string) {
@@ -293,6 +337,15 @@ test("service map route renders the production surfaces and exposes the JSON con
   await expect(page.getByTestId("service-map-environment-contract-gate")).toContainText(
     smokeEnvGate,
   );
+  await expect(page.getByTestId("service-map-observability-analytics")).toContainText(
+    smokeExpectedObservabilityAnalyticsMode,
+  );
+  await expect(page.getByTestId("service-map-observability-errors")).toContainText(
+    smokeExpectedObservabilityErrorMode,
+  );
+  await expect(page.getByTestId("service-map-observability-triage")).toContainText(
+    "/api/observability",
+  );
   if (smokeExpectedMissingEnvKey) {
     await expect(page.getByTestId("service-map-environment-contract")).toContainText(
       `Missing: ${smokeExpectedMissingEnvKey}`,
@@ -301,6 +354,10 @@ test("service map route renders the production surfaces and exposes the JSON con
   await expect(page.getByRole("link", { name: "Open validation JSON" })).toHaveAttribute(
     "href",
     "/api/environment-contract",
+  );
+  await expect(page.getByRole("link", { name: "Open observability JSON" })).toHaveAttribute(
+    "href",
+    "/api/observability",
   );
   await expect(page.getByRole("link", { name: "Open JSON contract" })).toHaveAttribute(
     "href",
@@ -321,6 +378,23 @@ test("service map route renders the production surfaces and exposes the JSON con
       missingKeys: string[];
       invalidKeys: string[];
     };
+    observabilityStatus: {
+      release: string;
+      telemetryForwardingEventTypes: string[];
+      analytics: {
+        mode: string;
+        endpoint: string | null;
+      };
+      errorTracking: {
+        mode: string;
+        endpoint: string | null;
+      };
+      triage: {
+        queryPath: string;
+        syntheticCheckPath: string;
+        latestProbeAt: string | null;
+      };
+    };
     planningAssets: Array<{ id: string; href: string }>;
     productSurfaces: Array<{ id: string; name: string }>;
     serviceBoundaries: Array<{ id: string; ownedData: string[] }>;
@@ -339,6 +413,23 @@ test("service map route renders the production surfaces and exposes the JSON con
   expect(payload.environmentContractStatus.runtimeMode).toBe(smokeRuntimeMode);
   expect(payload.environmentContractStatus.runtimeModeSource).toBe(
     smokeRuntimeModeSource,
+  );
+  expect(payload.observabilityStatus.release.length).toBeGreaterThan(0);
+  expect(payload.observabilityStatus.telemetryForwardingEventTypes).toContain(
+    "mission_launched",
+  );
+  expect(payload.observabilityStatus.telemetryForwardingEventTypes).toContain(
+    "mission_completed",
+  );
+  expect(payload.observabilityStatus.analytics.mode).toBe(
+    smokeExpectedObservabilityAnalyticsMode,
+  );
+  expect(payload.observabilityStatus.errorTracking.mode).toBe(
+    smokeExpectedObservabilityErrorMode,
+  );
+  expect(payload.observabilityStatus.triage.queryPath).toBe("/api/observability");
+  expect(payload.observabilityStatus.triage.syntheticCheckPath).toBe(
+    "/api/observability",
   );
   if (smokeExpectedMissingEnvKey) {
     expect(payload.environmentContractStatus.missingKeys).toContain(
@@ -381,6 +472,7 @@ test("service map route renders the production surfaces and exposes the JSON con
   const environmentValidationResponse = await request.get(
     "/api/environment-contract",
   );
+  const observabilityResponse = await request.get("/api/observability");
   const releaseRunbookResponse = await request.get(
     "/planning/production-release-runbook.md",
   );
@@ -388,6 +480,7 @@ test("service map route renders the production surfaces and exposes the JSON con
   expect(migrationRunbookResponse.ok()).toBeTruthy();
   expect(environmentContractResponse.ok()).toBeTruthy();
   expect(environmentValidationResponse.status()).toBe(smokeEnvironmentApiStatus);
+  expect(observabilityResponse.ok()).toBeTruthy();
   expect(releaseRunbookResponse.ok()).toBeTruthy();
   await expect(await migrationRunbookResponse.text()).toContain(
     "# Prisma Postgres Migration Runbook",
@@ -406,6 +499,20 @@ test("service map route renders the production surfaces and exposes the JSON con
     runtimeModeSource: string;
     missingKeys: string[];
   };
+  const observabilityPayload = (await observabilityResponse.json()) as {
+    release: string;
+    telemetryForwardingEventTypes: string[];
+    analytics: {
+      mode: string;
+    };
+    errorTracking: {
+      mode: string;
+    };
+    triage: {
+      queryPath: string;
+      syntheticCheckPath: string;
+    };
+  };
 
   expect(environmentValidationPayload.contractReady).toBe(smokeExpectContractReady);
   expect(environmentValidationPayload.gateStatus).toBe(smokeEnvGate);
@@ -418,6 +525,23 @@ test("service map route renders the production surfaces and exposes the JSON con
       smokeExpectedMissingEnvKey,
     );
   }
+  expect(observabilityPayload.release.length).toBeGreaterThan(0);
+  expect(observabilityPayload.telemetryForwardingEventTypes).toContain(
+    "mission_launched",
+  );
+  expect(observabilityPayload.telemetryForwardingEventTypes).toContain(
+    "mission_completed",
+  );
+  expect(observabilityPayload.analytics.mode).toBe(
+    smokeExpectedObservabilityAnalyticsMode,
+  );
+  expect(observabilityPayload.errorTracking.mode).toBe(
+    smokeExpectedObservabilityErrorMode,
+  );
+  expect(observabilityPayload.triage.queryPath).toBe("/api/observability");
+  expect(observabilityPayload.triage.syntheticCheckPath).toBe(
+    "/api/observability",
+  );
 });
 
 test("host can only deploy after the full squad is locked and ready", async ({ browser, page }) => {
@@ -755,7 +879,7 @@ test("primary operator can clear Glass Wastes and persist the final recovery sta
     page.getByText("Last clear: Glass Wastes", { exact: true }),
   ).toBeVisible();
   await expect(
-    page.getByText("Current mission: Glass Wastes", { exact: true }),
+    page.getByText("Current mission: Neon Underbelly", { exact: true }),
   ).toBeVisible();
   await expect(page.getByTestId("command-deck-event-summary")).toBeVisible();
   await expect(page.getByTestId("command-deck-event-band")).toHaveText(

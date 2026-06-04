@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/db";
+import { forwardTelemetryEventsToAnalytics } from "@/lib/observability";
 import {
   playtestIssueSeverities,
   type PlaytestFocusArea,
@@ -28,6 +29,13 @@ export const telemetryEventTypes = [
   "telegraph_failed",
   "playtest_session_logged",
   "playtest_issue_logged",
+  "observability_probe_requested",
+  "observability_analytics_delivered",
+  "observability_analytics_failed",
+  "observability_analytics_skipped",
+  "observability_error_delivered",
+  "observability_error_failed",
+  "observability_error_skipped",
 ] as const;
 
 export type TelemetryEventType = (typeof telemetryEventTypes)[number];
@@ -132,6 +140,31 @@ const starterBuildBalanceTargets: Record<
     finalIntegrity: { min: 35, max: 70 },
     reactionRate: { min: 50, max: 80 },
   },
+  "void-archive": {
+    actionsPerClear: { min: 8, max: 13 },
+    finalIntegrity: { min: 65, max: 95 },
+    reactionRate: { min: 55, max: 85 },
+  },
+  "phase-flux": {
+    actionsPerClear: { min: 7, max: 11 },
+    finalIntegrity: { min: 40, max: 75 },
+    reactionRate: { min: 60, max: 90 },
+  },
+  "thunder-crush": {
+    actionsPerClear: { min: 9, max: 14 },
+    finalIntegrity: { min: 50, max: 80 },
+    reactionRate: { min: 55, max: 85 },
+  },
+  "null-signal": {
+    actionsPerClear: { min: 7, max: 12 },
+    finalIntegrity: { min: 45, max: 80 },
+    reactionRate: { min: 65, max: 92 },
+  },
+  "data-core": {
+    actionsPerClear: { min: 7, max: 12 },
+    finalIntegrity: { min: 50, max: 85 },
+    reactionRate: { min: 60, max: 90 },
+  },
 };
 
 function serializeTelemetryContext(
@@ -234,6 +267,12 @@ export async function recordTelemetryEvents(events: TelemetryEventInput[]) {
     });
   } catch {
     // Telemetry is best-effort for the prototype and should not block user flow.
+  }
+
+  try {
+    await forwardTelemetryEventsToAnalytics(events);
+  } catch {
+    // Hosted analytics forwarding is also best-effort and should not block user flow.
   }
 }
 

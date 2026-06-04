@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { readEnvironmentContractStatus } from "@/lib/environment-contract";
+import { readObservabilityStatus } from "@/lib/observability";
 
 import {
   backlogMilestones,
@@ -31,6 +32,8 @@ import {
   starterPairings,
 } from "@/lib/playable-slice";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   return NextResponse.json({
     sliceMetrics,
@@ -41,6 +44,7 @@ export async function GET() {
     executionChecklist,
     planningAssets,
     environmentContractStatus: readEnvironmentContractStatus(),
+    observabilityStatus: await readObservabilityStatus(),
     definitionOfDone,
     firstFaction,
     hubCity,

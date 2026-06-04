@@ -160,6 +160,17 @@ export type MissionZone = {
   rewardFocus: string;
 };
 
+export type BondTier = {
+  id: string;
+  name: string;
+  resonanceThreshold: number;
+  aiTierRequired: number;
+  summary: string;
+  humanUnlock: string;
+  aiUnlock: string;
+  bondUnlock: string;
+};
+
 export const liveEventWindowIds = [
   "inactive",
   "warning",
@@ -521,13 +532,13 @@ export const sliceMetrics: SliceMetric[] = [
   },
   {
     label: "Starter roster",
-    value: "3 AI companions",
-    note: "CAIRN-7, VEIL-3, and TALON-9 create defensive, control, and aggressive pair identities without shallow roster bloat.",
+    value: "8 AI companions",
+    note: "Three Harmony starters plus five faction-specific companions across Preservation, Evolution, Dominion, Fracture, and the unaligned Architect class.",
   },
   {
     label: "Mission footprint",
-    value: "2 zones + 1 event",
-    note: "Ash Circuit teaches trust under pressure while Glass Wastes escalates into a social defense event.",
+    value: "4 zones + 1 event",
+    note: "Ash Circuit and Glass Wastes teach the starter loop; Neon Underbelly and Iron Citadel push the roster into faction-specific pressure.",
   },
   {
     label: "Onboarding surface",
@@ -1055,6 +1066,71 @@ export const starterCompanions: StarterCompanion[] = [
     introBeat:
       "Raze appears in a Watch Ring sparring drill that turns into a live breach alert.",
   },
+  {
+    id: "apex-4",
+    name: "APEX-4",
+    callsign: '"Archive"',
+    className: "Custodian",
+    role: "Zone lockdown, relic preservation, and contested-boundary enforcement for methodical operators.",
+    personality: "Formal, encyclopedic, and deeply uncomfortable when protocol is bent.",
+    bondSignature:
+      "Seals a zone radius and converts every blocked threat into archived intelligence.",
+    recommendedBuild: "Void Sentinel plus Void attunement.",
+    introBeat:
+      "Archive is encountered enforcing a contested relic boundary in Accord Court and offers coalition terms instead of a fight.",
+  },
+  {
+    id: "shift-2",
+    name: "SHIFT-2",
+    callsign: '"Flux"',
+    className: "Mutant",
+    role: "Rapid-adaptation assault and mid-combat build pivots for volatile operators.",
+    personality: "Unpredictable, enthusiastic about change, and fundamentally opposed to a fixed form.",
+    bondSignature:
+      "Rewrites its own combat profile mid-fight to exploit whatever gap the human just opened.",
+    recommendedBuild: "Phase Cutter plus Phase attunement.",
+    introBeat:
+      "Flux appears mid-breach in a form no Concord archive can match, and the player is the first human it decides to trust.",
+  },
+  {
+    id: "iron-11",
+    name: "IRON-11",
+    callsign: '"Crush"',
+    className: "Juggernaut",
+    role: "Frontline suppression, heavy-weapon coverage, and attrition warfare for relentless operators.",
+    personality: "Blunt, loyal once a hierarchy is established, and incapable of respecting half measures.",
+    bondSignature:
+      "Absorbs pressure and converts it into a follow-through hammer strike that ends the exchange.",
+    recommendedBuild: "Thunder Maul plus Thunder attunement.",
+    introBeat:
+      "Crush is a defector from a Dominion assault column who decides the Concord pair is the only side worth fighting beside.",
+  },
+  {
+    id: "echo-5",
+    name: "ECHO-5",
+    callsign: '"Signal"',
+    className: "Phantom",
+    role: "Disruption, signal theft, and stealth reconnaissance for operators who prefer deception over force.",
+    personality: "Cryptic, amused by confusion, and loyal in ways that are impossible to verify until they matter.",
+    bondSignature:
+      "Corrupts the enemy's own targeting data and redirects their attack into a safer angle.",
+    recommendedBuild: "Null Weaver plus Null attunement.",
+    introBeat:
+      "Signal is already inside the mission before the briefing ends, and the player's first job is to figure out which side it is actually on.",
+  },
+  {
+    id: "nexus-0",
+    name: "NEXUS-0",
+    callsign: '"Core"',
+    className: "Architect",
+    role: "Cross-faction synthesis, field protocol override, and adaptive resource generation for flexible operators.",
+    personality: "Measured, systems-oriented, and capable of reading any faction's code as a first language.",
+    bondSignature:
+      "Compiles a real-time tactical override that pulls the best available tool from every faction protocol.",
+    recommendedBuild: "Data Lance plus Data attunement.",
+    introBeat:
+      "Core is a neutral presence in the Memory Garden that appears the moment the player's bond record reaches a threshold no single faction expected.",
+  },
 ];
 
 export const starterLoadouts: StarterLoadout[] = [
@@ -1103,6 +1179,81 @@ export const starterLoadouts: StarterLoadout[] = [
       { label: "Durability", value: "Medium" },
     ],
   },
+  {
+    id: "void-sentinel",
+    name: "Void Sentinel",
+    weaponDiscipline: "Void Shield Staff",
+    element: "Void",
+    role: "Zone lockdown specialist using void barriers, law-enforcement drives, and counter-breach coverage.",
+    signatureTool: "Null-field projector staff",
+    bondUse: "Pairs best with APEX-4 to turn legal authority into territorial denial.",
+    introHook: "Best for players who want to control the map and punish anything that enters without clearance.",
+    stats: [
+      { label: "Mobility", value: "Low" },
+      { label: "Control", value: "High" },
+      { label: "Durability", value: "High" },
+    ],
+  },
+  {
+    id: "phase-cutter",
+    name: "Phase Cutter",
+    weaponDiscipline: "Phase Blade",
+    element: "Phase",
+    role: "Rapid-shift close-quarters fighter that resets its own attack pattern each time a threat changes.",
+    signatureTool: "Adaptive resonance edge",
+    bondUse: "Pairs best with SHIFT-2 to chain mid-fight pivots into unpredictable burst sequences.",
+    introHook: "Best for players who want to constantly surprise the enemy and never commit to a single pattern.",
+    stats: [
+      { label: "Mobility", value: "High" },
+      { label: "Control", value: "Medium" },
+      { label: "Durability", value: "Low" },
+    ],
+  },
+  {
+    id: "thunder-maul",
+    name: "Thunder Maul",
+    weaponDiscipline: "Shock Maul",
+    element: "Thunder",
+    role: "Attrition-pressure brawler that wins by outlasting every exchange rather than outpacing it.",
+    signatureTool: "Shock-mass impact driver",
+    bondUse: "Pairs best with IRON-11 to convert sustained punishment into overwhelming counter-damage.",
+    introHook: "Best for players who want to build pressure steadily and cash it all out in one unstoppable combo.",
+    stats: [
+      { label: "Mobility", value: "Low" },
+      { label: "Control", value: "Medium" },
+      { label: "Durability", value: "High" },
+    ],
+  },
+  {
+    id: "null-weaver",
+    name: "Null Weaver",
+    weaponDiscipline: "Null Lash",
+    element: "Null",
+    role: "Signal disruption specialist that corrupts targeting, redirects aggression, and disappears when cornered.",
+    signatureTool: "Data-ghost lash assembly",
+    bondUse: "Pairs best with ECHO-5 to feed misdirected attacks back through the enemy's own chain of command.",
+    introHook: "Best for players who want to win by making the enemy fight itself before the real hit lands.",
+    stats: [
+      { label: "Mobility", value: "High" },
+      { label: "Control", value: "High" },
+      { label: "Durability", value: "Low" },
+    ],
+  },
+  {
+    id: "data-lance",
+    name: "Data Lance",
+    weaponDiscipline: "Resonance Lance",
+    element: "Data",
+    role: "Universal-access specialist that adapts its element and pressure type to whatever the current field demands.",
+    signatureTool: "Faction-neutral protocol lance",
+    bondUse: "Pairs best with NEXUS-0 to override any faction's defensive protocol and open a cross-faction finisher.",
+    introHook: "Best for players who want every run to feel slightly different and prefer tools that grow with the mission's needs.",
+    stats: [
+      { label: "Mobility", value: "Medium" },
+      { label: "Control", value: "Medium" },
+      { label: "Durability", value: "Medium" },
+    ],
+  },
 ];
 
 export const missionZones: MissionZone[] = [
@@ -1129,6 +1280,30 @@ export const missionZones: MissionZone[] = [
     threat:
       "Fracture corruption, line-of-sight distortion, and rotating event modifiers create shifting priorities.",
     rewardFocus: "Event currency, faction reputation, and rare bond fragments.",
+  },
+  {
+    id: "neon-underbelly",
+    name: "Neon Underbelly",
+    category: "Faction incursion zone",
+    summary:
+      "A decommissioned Evolution research lab where rogue mutation experiments broke containment and turned the floors into an accelerating adaptive threat cascade.",
+    objective:
+      "Shut down the rogue experiment chain, recover the mutation index, and extract before the building rewrites itself around the pair.",
+    threat:
+      "Adaptive Evolution units that change attack pattern mid-fight, environmental mutation surges, and self-modifying corridors.",
+    rewardFocus: "Evolution faction access, phase attunement fragments, and experimental bond upgrade components.",
+  },
+  {
+    id: "iron-citadel",
+    name: "Iron Citadel",
+    category: "High-difficulty assault zone",
+    summary:
+      "A Dominion command fortress that went dark after a leadership protocol war and now runs automated defense on permanent lockdown.",
+    objective:
+      "Breach the outer wall, disable the command lattice, and prevent Dominion's offline warmachines from receiving an unsanctioned restart signal.",
+    threat:
+      "Juggernaut-class Dominion automatons, command-lattice override traps, and escalating lockdown tiers that close the exit route the longer the pair stays.",
+    rewardFocus: "Dominion salvage, thunder attunement cores, and high-tier bond resonance fragments.",
   },
 ];
 
@@ -1720,7 +1895,70 @@ export const backlogMilestones: BacklogMilestone[] = [
 export const scopeLocks = [
   "Do not add PvP to the first playable.",
   "Do not expand beyond one sponsor faction and one hostile pressure source.",
-  "Do not add more than three starter companions before bonded combat feels correct.",
+  "Do not expand companion faction depth before cross-faction diplomacy mechanics are playable.",
   "Do not build seasonal tooling before one live event loop is already fun.",
   "Do not expand to open-world traversal until the hub loop and mission loop are stable.",
+];
+
+export const bondTierDefinitions: BondTier[] = [
+  {
+    id: "initial",
+    name: "Initial",
+    resonanceThreshold: 0,
+    aiTierRequired: 0,
+    summary: "The bond exists but has not yet been pressure-tested.",
+    humanUnlock: "Basic weapon disciplines and starter attunement.",
+    aiUnlock: "Baseline combat role and single bond action.",
+    bondUnlock: "Bond action and standard finisher are available.",
+  },
+  {
+    id: "synchronizing",
+    name: "Synchronizing",
+    resonanceThreshold: 10,
+    aiTierRequired: 1,
+    summary: "Shared instincts begin to form. Combo windows open faster.",
+    humanUnlock: "First loadout variant slot and secondary attunement.",
+    aiUnlock: "Second combat role behavior and reduced bond action cooldown.",
+    bondUnlock: "Bond action cooldown reduced by one step.",
+  },
+  {
+    id: "resonant",
+    name: "Resonant",
+    resonanceThreshold: 25,
+    aiTierRequired: 2,
+    summary: "The pair reads each other without prompts. Finisher costs drop.",
+    humanUnlock: "Second weapon discipline slot unlocked.",
+    aiUnlock: "AI combat role expands with a second active behavior.",
+    bondUnlock: "Finisher charge cost reduced. Bond action gains a support proc.",
+  },
+  {
+    id: "locked",
+    name: "Locked",
+    resonanceThreshold: 45,
+    aiTierRequired: 3,
+    summary: "Bond frequency is stable enough to anticipate telegraph windows.",
+    humanUnlock: "Full relic gadget slot and third attunement.",
+    aiUnlock: "AI gains an autonomous react-to-telegraph behavior.",
+    bondUnlock: "AI pre-empts telegraphs when bond action was last used within three actions.",
+  },
+  {
+    id: "fused",
+    name: "Fused",
+    resonanceThreshold: 70,
+    aiTierRequired: 4,
+    summary: "Human and AI operate as a single tactical unit. Overdrive mode available.",
+    humanUnlock: "Overdrive activation slot added to the action rail.",
+    aiUnlock: "Overdrive burst: AI enters enhanced role for one combat phase.",
+    bondUnlock: "Overdrive mode: full pair syncs into a shared damage amplification state.",
+  },
+  {
+    id: "transcendent",
+    name: "Transcendent",
+    resonanceThreshold: 100,
+    aiTierRequired: 5,
+    summary: "Maximum bond ceiling. Pair-specific passive and shared field aura are active.",
+    humanUnlock: "Pair-specific passive trait permanently active.",
+    aiUnlock: "AI field aura: passive zone effect active during all deployments.",
+    bondUnlock: "Shared field aura: pair radiates a permanent combat effect tied to bond element.",
+  },
 ];

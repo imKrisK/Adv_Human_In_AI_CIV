@@ -348,9 +348,11 @@ Summary:
 Activate staged observability with release context for both telemetry and errors.
 
 Implementation checklist:
-- [ ] Send staged mission lifecycle events to analytics.
-- [ ] Send staged exceptions to error tracking with release tags.
-- [ ] Publish triage view for new failures.
+- [x] Add provider-aware observability status with release tagging and a published triage JSON route.
+- [x] Add authenticated synthetic probe flow that records observability audit telemetry.
+- [x] Forward mission lifecycle telemetry to analytics when active provider credentials exist.
+- [ ] Verify staged mission lifecycle delivery in PostHog with real hosted secrets.
+- [ ] Verify staged handled error delivery in Sentry with release context.
 
 Acceptance criteria:
 1. Mission lifecycle events are visible in staged analytics.
@@ -361,6 +363,11 @@ Definition of done:
 1. Observability hooks are merged and verified.
 2. Synthetic event and error evidence is attached.
 3. P13-10 can use observability output as part of go or no-go evidence.
+
+Current repo status:
+1. `src/lib/observability.ts`, `/api/observability`, the service-map UI, and smoke coverage are in place locally.
+2. `/api/observability` now provides the triage query path and the authenticated synthetic check endpoint.
+3. Staged evidence for GitHub issue `#8` still depends on real PostHog and Sentry credentials.
 
 ### P13-09
 

@@ -1,5 +1,8 @@
 import "dotenv/config";
+import dotenv from "dotenv";
+dotenv.config({ path: ".env.local", override: true });
 
+import { clerkSetup } from "@clerk/testing/playwright";
 import { defineConfig, devices } from "@playwright/test";
 
 const sessionServiceFallbackPublishableKey =
@@ -22,6 +25,8 @@ const shouldStartLocalSessionServiceRuntime =
 
 export default defineConfig({
   testDir: "./tests",
+  globalSetup: "./tests/global-setup.ts",
+  timeout: 180_000,
   fullyParallel: false,
   forbidOnly: Boolean(process.env.CI),
   retries: process.env.CI ? 2 : 0,

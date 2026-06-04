@@ -31,6 +31,13 @@ model Session {
   @@index([expiresAt])
 }
 
+model EventConfig {
+  id         String   @id
+  configJson String
+  updatedAt  DateTime @updatedAt
+  updatedBy  String?
+}
+
 model TelemetryEvent {
   id          String   @id @default(cuid())
   userId      String?

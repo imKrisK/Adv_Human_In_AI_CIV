@@ -13,6 +13,7 @@ on:
       - playwright.config.ts
       - next.config.ts
       - prisma.config.ts
+      - prisma.postgres.config.ts
       - tsconfig.json
       - eslint.config.mjs
       - postcss.config.mjs
@@ -29,6 +30,7 @@ on:
       - playwright.config.ts
       - next.config.ts
       - prisma.config.ts
+      - prisma.postgres.config.ts
       - tsconfig.json
       - eslint.config.mjs
       - postcss.config.mjs
@@ -42,6 +44,7 @@ jobs:
   smoke:
     runs-on: ubuntu-latest
     env:
+      APP_RELEASE: ${{ github.sha }}
       DATABASE_URL: file:./dev.db
 
     steps:
@@ -94,6 +97,7 @@ jobs:
           --health-retries 5
     env:
       APP_RUNTIME_MODE: hosted-candidate
+      APP_RELEASE: ${{ github.sha }}
       NODE_ENV: development
       NEXT_PUBLIC_APP_URL: http://localhost:3000
       DATABASE_URL: ${{ secrets.POSTGRES_DATABASE_URL != '' && secrets.POSTGRES_DATABASE_URL || 'postgresql://postgres:postgres@127.0.0.1:5432/adv_human_ai_civ?schema=public' }}
@@ -119,14 +123,14 @@ jobs:
       R2_ACCESS_KEY_ID: smoke-r2-key
       R2_SECRET_ACCESS_KEY: smoke-r2-secret
       R2_PUBLIC_BASE_URL: https://assets.example.com
-      NEXT_PUBLIC_POSTHOG_KEY: phc_smoke_placeholder
-      NEXT_PUBLIC_POSTHOG_HOST: https://us.i.posthog.com
-      POSTHOG_PROJECT_API_KEY: smoke-posthog-api-key
-      SENTRY_DSN: https://public@example.ingest.sentry.io/1
-      NEXT_PUBLIC_SENTRY_DSN: https://public@example.ingest.sentry.io/1
-      SENTRY_AUTH_TOKEN: smoke-sentry-token
-      SENTRY_ORG: smoke-org
-      SENTRY_PROJECT: adv-human-ai-civ
+      NEXT_PUBLIC_POSTHOG_KEY: ${{ secrets.NEXT_PUBLIC_POSTHOG_KEY != '' && secrets.NEXT_PUBLIC_POSTHOG_KEY || 'phc_smoke_placeholder' }}
+      NEXT_PUBLIC_POSTHOG_HOST: ${{ secrets.NEXT_PUBLIC_POSTHOG_HOST != '' && secrets.NEXT_PUBLIC_POSTHOG_HOST || 'https://us.i.posthog.com' }}
+      POSTHOG_PROJECT_API_KEY: ${{ secrets.POSTHOG_PROJECT_API_KEY != '' && secrets.POSTHOG_PROJECT_API_KEY || 'smoke-posthog-api-key' }}
+      SENTRY_DSN: ${{ secrets.SENTRY_DSN != '' && secrets.SENTRY_DSN || 'https://public@example.ingest.sentry.io/1' }}
+      NEXT_PUBLIC_SENTRY_DSN: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN != '' && secrets.NEXT_PUBLIC_SENTRY_DSN || secrets.SENTRY_DSN != '' && secrets.SENTRY_DSN || 'https://public@example.ingest.sentry.io/1' }}
+      SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN != '' && secrets.SENTRY_AUTH_TOKEN || 'smoke-sentry-token' }}
+      SENTRY_ORG: ${{ secrets.SENTRY_ORG != '' && secrets.SENTRY_ORG || 'smoke-org' }}
+      SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT != '' && secrets.SENTRY_PROJECT || 'adv-human-ai-civ' }}
       HOSTED_POSTGRES_SOURCE: ${{ secrets.POSTGRES_DATABASE_URL != '' && 'github-secret' || 'workflow-service' }}
       HOSTED_SESSION_SERVICE_SOURCE: ${{ secrets.SESSION_SERVICE_BASE_URL != '' && 'github-secret' || 'workflow-dedicated-runtime' }}
       SMOKE_RUNTIME_MODE: hosted-candidate

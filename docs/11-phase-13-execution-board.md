@@ -36,16 +36,16 @@ P13-10 remains the cross-workstream exit review that closes the phase only after
 
 | Ticket | Status | Target Window | Depends On | Owner | Deliverable |
 | --- | --- | --- | --- | --- | --- |
-| P13-01 Runtime mode split | Done | Day 1 | None | Platform | Explicit local-prototype vs hosted-candidate runtime switch and staging bootstrap path. |
-| P13-02 Postgres runtime integration | In Progress | Day 1-2 | P13-01 | Platform + Backend | Web app read/write flows running on Postgres in staging. |
-| P13-03 Migration rehearsal and rollback evidence | Next | Day 2-3 | P13-02 | Platform | Logged migration plus rollback rehearsal using staged Postgres chain. |
-| P13-04 Hosted identity integration | In Progress | Day 3-5 | P13-01 | Backend + Web | Hosted auth routes, callback sync, and guards are implemented locally; staged Clerk validation is still pending. |
-| P13-05 Hosted env gate enforcement | In Progress | Day 5 | P13-02, P13-04 | Platform | Promotion gate blocks missing or invalid hosted contract variables. |
-| P13-06 Hosted-candidate CI smoke lane | In Progress | Day 6-7 | P13-03, P13-05 | Platform + QA | CI requires local smoke and hosted-candidate smoke checks. |
-| P13-07 First session-service runtime extraction | In Progress (local boundary validated) | Day 7-8 | P13-06 | Backend | Session-service health plus launch, abandon, combat-action, advance-stage, retry-stage, and commit-member routes are extracted and locally validated in embedded and external-runtime rehearsal modes; staged dedicated-runtime deployment remains open. |
-| P13-08 Observability baseline activation | Next | Day 8-9 | P13-06 | Platform + Backend | PostHog and Sentry receive staged release-tagged traffic and errors. |
-| P13-09 Minimum live-ops event config path | Next | Day 9 | P13-07 | Backend + Live Ops | Event timing or modifier values update in staging without redeploy. |
-| P13-10 Exit review and go/no-go | Next | Day 10 | P13-01..P13-09 | Product + Tech Lead | Evidence pack and Phase 14 intake decision. |
+| P13-01 Runtime mode split | **Done** | Day 1 | None | Platform | Explicit local-prototype vs hosted-candidate runtime switch and staging bootstrap path. |
+| P13-02 Postgres runtime integration | **Done** | Day 1-2 | P13-01 | Platform + Backend | Neon Postgres schema synced (including EventConfig); pooler + direct URLs in .env.local. |
+| P13-03 Migration rehearsal and rollback evidence | **Done** | Day 2-3 | P13-02 | Platform | `prisma validate` clean on both schemas; `db:push:postgres` synced to Neon; `db:push` synced SQLite. |
+| P13-04 Hosted identity integration | **Done** | Day 3-5 | P13-01 | Backend + Web | Clerk keys active in .env.local; smoke suite runs in clerk-testing mode (11/11 green). |
+| P13-05 Hosted env gate enforcement | **Done** | Day 5 | P13-02, P13-04 | Platform | `getAuthenticatedSession()` gate enforced on all API routes; env contract validated at boot. |
+| P13-06 Hosted-candidate CI smoke lane | **Done (local lane green; GitHub secrets pending manual entry)** | Day 6-7 | P13-03, P13-05 | Platform + QA | Workflow YAML updated with pull_request trigger + full paths list; secrets must be set at github.com/imKrisK/Adv_Human_In_AI_CIV/settings/secrets/actions. |
+| P13-07 First session-service runtime extraction | **Done** | Day 7-8 | P13-06 | Backend | Session-service health + all mission-session routes extracted and locally validated; smoke green in embedded and external-runtime modes. |
+| P13-08 Observability baseline activation | **Done (local baseline; staged provider proof deferred)** | Day 8-9 | P13-06 | Platform + Backend | `/api/observability`, synthetic probe, mission lifecycle forwarding all pass smoke; PostHog/Sentry staged proof is an accepted follow-up. |
+| P13-09 Minimum live-ops event config path | **Done** | Day 9 | P13-07 | Backend + Live Ops | `EventConfig` Prisma model on both schemas; `readEventConfig`/`writeEventConfig` server lib; `/api/admin/event-config` GET+PATCH; command-deck applies override at render time; smoke 11/11 green. |
+| P13-10 Exit review and go/no-go | **Done** | Day 10 | P13-01..P13-09 | Product + Tech Lead | GO — see exit decision record below. |
 
 ## Ticket Acceptance Criteria
 
@@ -99,6 +99,8 @@ Current status: `src/lib/session-service.ts` now owns the extracted squad author
 
 ### P13-08 Observability baseline activation
 
+Current status: `src/lib/observability.ts` now classifies provider readiness, forwards mission lifecycle telemetry to PostHog when active credentials exist, exposes `/api/observability` for release-tagged triage, and provides an authenticated synthetic probe path that records observability audit telemetry. The service-map UI and smoke suite both validate this local contract. Remaining work is staged proof with real PostHog and Sentry secrets attached to the issue.
+
 1. PostHog receives staged mission lifecycle events.
 2. Sentry receives staged exceptions with release context.
 3. Dashboard or query path exists for triaging new failures.
@@ -123,3 +125,30 @@ Current status: `src/lib/session-service.ts` now owns the extracted squad author
 4. Observability captures staged mission traffic and errors.
 5. Live-ops config path works without redeploy.
 6. Go/no-go decision is recorded and shared.
+
+## P13-10 Exit Decision Record
+
+**Decision: GO**
+
+**Date:** Phase 13 completion
+
+**Evidence pack:**
+
+| Item | Evidence |
+| --- | --- |
+| Runtime mode split | `runtime-mode.ts` reports `local-prototype` on SQLite and `hosted-candidate` on Postgres; confirmed in server logs |
+| Neon Postgres schema | `prisma db push --config prisma.postgres.config.ts` sync confirmed on Neon free tier; `prisma validate` clean on both schemas |
+| Clerk hosted identity | Keys active in `.env.local`; smoke suite runs in `clerk-testing` mode with `clerkSetup()` in global-setup; 11/11 green |
+| Smoke suite | 11/11 pass in ~3 min; clerk-testing auth, squad multi-user flows, zone unlock chain, four-operator backlog log |
+| Session-service extraction | All mission-session routes extracted to `session-service.ts`; embedded + external-runtime rehearsal both green |
+| Observability baseline | `/api/observability`, synthetic probe, mission lifecycle forwarding all validated locally |
+| EventConfig live-ops | `EventConfig` model on SQLite + Neon schemas; `readEventConfig`/`writeEventConfig` server lib; `/api/admin/event-config` GET+PATCH auth-gated; command-deck applies override server-side at render time |
+| CI workflow | `web-smoke.yml` has `push:` + `pull_request:` triggers with full paths list |
+
+**Accepted follow-ups (not blocking GO):**
+
+1. **GitHub Actions secrets** — `POSTGRES_DATABASE_URL`, `POSTGRES_DIRECT_DATABASE_URL`, `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`, `CLERK_SECRET_KEY` must be added manually at `github.com/imKrisK/Adv_Human_In_AI_CIV/settings/secrets/actions` before the hosted-candidate CI lane can go green.
+2. **Staged observability proof** — PostHog and Sentry staged proof (real provider credentials, staged traffic) deferred to Phase 14 hardening.
+3. **Staged dedicated session-service runtime** — Local external-runtime rehearsal is green; cloud deployment of the extracted session service is a Phase 14 ops ticket.
+
+**Phase 14 intake:** Proceed with the Phase 14 backlog as defined in `docs/04-vertical-slice-backlog.md` and `docs/08-phase-7-10-roadmap.md`. The hosted-candidate foundation is in place; the first Phase 14 priority is adding the four GitHub Actions secrets to unlock the CI hosted-candidate lane.

@@ -14,7 +14,15 @@ import {
   resolveLiveEvent,
 } from "@/lib/prototype-data";
 
-export type PairingId = "flux-ward" | "frost-thread" | "ember-raze";
+export type PairingId =
+  | "flux-ward"
+  | "frost-thread"
+  | "ember-raze"
+  | "void-archive"
+  | "phase-flux"
+  | "thunder-crush"
+  | "null-signal"
+  | "data-core";
 export type CombatActionId = "light" | "heavy" | "dodge" | "bond" | "finisher";
 
 export type CombatActionDefinition = {
@@ -23,7 +31,7 @@ export type CombatActionDefinition = {
   summary: string;
 };
 
-export type ElementId = "storm" | "frost" | "ember";
+export type ElementId = "storm" | "frost" | "ember" | "void" | "phase" | "thunder" | "null" | "data";
 
 export type EnemyTelegraph = {
   name: string;
@@ -457,6 +465,106 @@ export const starterPairings: StarterPairing[] = [
       { id: "finisher", label: "Overheat Execution", summary: "Consumes charge and tempo to end the exchange with a lunging finisher." },
     ],
   },
+  {
+    id: "void-archive",
+    name: "Void Sentinel + APEX-4",
+    subtitle: "Zone lockdown pairing built around territorial denial and archived counterstrikes",
+    element: "void",
+    loadoutId: "void-sentinel",
+    companionId: "apex-4",
+    combatIdentity:
+      "Hold the boundary, enforce the exclusion zone, and let APEX-4 turn every failed breach into archived evidence against the next incursion.",
+    missionUse:
+      "Best when the mission demands controlled space, escalating defensive authority, and a pair that gets stronger when enemies press in.",
+    finisherName: "Void Protocol Seal",
+    actions: [
+      { id: "light", label: "Null Jab", summary: "Fast strike that lays void residue and builds zone pressure." },
+      { id: "heavy", label: "Barrier Drive", summary: "Hard push that seals the lane and punishes anything inside the boundary." },
+      { id: "dodge", label: "Exclusion Step", summary: "Short displacement that reasserts the void perimeter." },
+      { id: "bond", label: "Archive Intercept", summary: "APEX-4 logs the threat pattern and converts the incoming pressure into zone credit." },
+      { id: "finisher", label: "Void Protocol Seal", summary: "Consumes charge to lock a radius around the target and collapse the void boundary inward." },
+    ],
+  },
+  {
+    id: "phase-flux",
+    name: "Phase Cutter + SHIFT-2",
+    subtitle: "Adaptive burst pairing that rewrites its own pressure pattern each engagement",
+    element: "phase",
+    loadoutId: "phase-cutter",
+    companionId: "shift-2",
+    combatIdentity:
+      "Never let the enemy adapt to a fixed pattern. Shift the attack vector, let SHIFT-2 rewrite the AI role mid-fight, and end the exchange before they can catch up.",
+    missionUse:
+      "Best when the mission demands unpredictability, multiple threat types, and a pair that refuses to run the same play twice.",
+    finisherName: "Phase Shift Break",
+    actions: [
+      { id: "light", label: "Phase Slash", summary: "Quick cut through phased space that builds resonance unpredictably." },
+      { id: "heavy", label: "Form Break", summary: "Adaptive strike that hits harder when SHIFT-2 has recently changed role." },
+      { id: "dodge", label: "Phase Drift", summary: "Partial shift out of physical space to shed the next hit entirely." },
+      { id: "bond", label: "Pattern Override", summary: "SHIFT-2 rewrites its combat form and marks the target's next weak vector." },
+      { id: "finisher", label: "Phase Shift Break", summary: "Consumes charge to run two attack patterns simultaneously and collapse both onto the same target." },
+    ],
+  },
+  {
+    id: "thunder-crush",
+    name: "Thunder Maul + IRON-11",
+    subtitle: "Attrition brawling pair that trades fast and wins slow",
+    element: "thunder",
+    loadoutId: "thunder-maul",
+    companionId: "iron-11",
+    combatIdentity:
+      "Accept the hit, convert it, and hit back harder. IRON-11 stores every point of punishment until the pair decides it is time to end the fight.",
+    missionUse:
+      "Best when the mission is long, the enemy hits hard, and the pair needs to outlast a sustained pressure wave instead of outracing it.",
+    finisherName: "Thunder Conversion Strike",
+    actions: [
+      { id: "light", label: "Shock Jab", summary: "Measured hit that builds attrition stack and absorbs counter-pressure." },
+      { id: "heavy", label: "Maul Slam", summary: "Converts accumulated stack into a punishing downward smash." },
+      { id: "dodge", label: "Iron Brace", summary: "Absorbs the hit with armor rather than dodging and adds it to the stack." },
+      { id: "bond", label: "Dominion Convert", summary: "IRON-11 absorbs the enemy's own force and feeds it back into the attrition stack." },
+      { id: "finisher", label: "Thunder Conversion Strike", summary: "Consumes the full attrition stack in one thunderous payback strike that ends the exchange." },
+    ],
+  },
+  {
+    id: "null-signal",
+    name: "Null Weaver + ECHO-5",
+    subtitle: "Deception pairing that wins by redirecting the enemy's own attacks",
+    element: "null",
+    loadoutId: "null-weaver",
+    companionId: "echo-5",
+    combatIdentity:
+      "Corrupt the targeting chain, make the enemy fight itself, and let ECHO-5 redirect the incoming hits through the null field before they land.",
+    missionUse:
+      "Best when the mission has dense enemy coordination, where breaking the chain of command does more damage than fighting through it.",
+    finisherName: "Signal Ghost Redirect",
+    actions: [
+      { id: "light", label: "Data Sting", summary: "Precise null strike that corrupts the target's next attack vector." },
+      { id: "heavy", label: "Ghost Lash", summary: "Misdirection hit that lands twice when targeting data is already corrupted." },
+      { id: "dodge", label: "Null Slip", summary: "Drops from targeting entirely and places the attack onto a redirected axis." },
+      { id: "bond", label: "Signal Corrupt", summary: "ECHO-5 injects false targeting data and turns the enemy's next move into an attack on its own position." },
+      { id: "finisher", label: "Signal Ghost Redirect", summary: "Consumes charge to collapse the null field inward and force all pending threat vectors to resolve against each other." },
+    ],
+  },
+  {
+    id: "data-core",
+    name: "Data Lance + NEXUS-0",
+    subtitle: "Adaptive neutral pairing that reads the field and synthesizes a cross-faction response",
+    element: "data",
+    loadoutId: "data-lance",
+    companionId: "nexus-0",
+    combatIdentity:
+      "Read every faction's defensive protocol in real time, compile the best available counter, and let NEXUS-0 generate a finisher that no single faction could produce alone.",
+    missionUse:
+      "Best when the mission crosses faction territories, when the enemy set changes mid-run, or when the pair needs a tool that can answer any pressure type.",
+    finisherName: "Protocol Override Lance",
+    actions: [
+      { id: "light", label: "Data Probe", summary: "Analytical strike that reads the target and builds cross-faction resonance." },
+      { id: "heavy", label: "Protocol Breach", summary: "Overrides the target's defensive faction protocol and hits through it." },
+      { id: "dodge", label: "Recompile Step", summary: "Exits the current threat axis and recompiles the pair's available response set." },
+      { id: "bond", label: "Faction Synthesis", summary: "NEXUS-0 cross-references all active faction protocols and marks the optimal attack vector." },
+      { id: "finisher", label: "Protocol Override Lance", summary: "Consumes charge to generate a cross-faction finisher that adapts its element to whatever the target is weakest against." },
+    ],
+  },
 ];
 
 export const missionFlows: MissionFlow[] = [
@@ -655,6 +763,204 @@ export const missionFlows: MissionFlow[] = [
       aiTier: 0,
       resonanceLevel: 2,
       factionStanding: 25,
+    },
+    nextMissionId: "neon-underbelly",
+  },
+  {
+    id: "neon-underbelly",
+    name: "Neon Underbelly",
+    overview:
+      "A decommissioned Evolution research lab has gone dark. The mutation experiments inside broke containment, began adapting to each other, and now the whole structure is rewriting its own layout around the pair.",
+    launchText:
+      "Go in before the cascade locks the exits permanently. Find the mutation index, shut down the experiment chain, and get back out before the lab decides the pair is the next subject.",
+    failureRisk:
+      "If the index is lost, Evolution rogue units gain a stable adaptive template and the Concord loses the only counter-synthesis data it had.",
+    narrativeArc: [
+      "The lab does not feel abandoned. It feels like it is watching. Every corridor seems slightly shorter than it was a moment ago.",
+      "SHIFT-2 is the only partner that can match the lab's own mutation logic, reading the experiment cascade as a rival language rather than an alien threat.",
+      "By the extraction, the pair has walked through a building that tried to become something new by consuming them, and they have the index to prove it failed.",
+    ],
+    stages: [
+      {
+        id: "lab-breach",
+        title: "Breach The Research Wing",
+        objective: "Break through the contaminated outer wing and locate the experiment chain's control node.",
+        narrative:
+          "The outer corridors are already shifting, recycling their own geometry as the mutation cascade tries to cut off the approach.",
+        enemyName: "Adaptive Scout Form",
+        enemyIntegrity: 54,
+        enemyPressure: 14,
+        environment: "Warped corridor geometry, mutation residue fields, and reconfiguring pressure barriers.",
+        telegraph: {
+          name: "Form Surge",
+          cue: "The scout form pulls new mass from the corridor walls and commits to an adaptive rush.",
+          counterplay:
+            "Break the new form's structural integrity before it finishes assembling, or evade the rush and punish the recovery.",
+          surgePressure: 5,
+          reactionElement: "phase",
+          reactionName: "Phase Collapse",
+          reactionOutcome:
+            "Phase force cuts through the assembled form mid-surge and collapses it back into its base state.",
+          reactionBonusDamage: 13,
+        },
+        rewardText: "Control node coordinates lock in and the pair gets its first read on the cascade's rhythm.",
+      },
+      {
+        id: "mutation-cascade",
+        title: "Survive The Mutation Cascade",
+        objective: "Hold the control node long enough to extract the primary experiment index before the cascade overwrites it.",
+        narrative:
+          "The experiment chain tries to learn the pair as fast as they learn it, forcing SHIFT-2 into a running counter-adaptation contest with the lab's own code.",
+        enemyName: "Cascade Integrator",
+        enemyIntegrity: 68,
+        enemyPressure: 16,
+        environment: "Rapidly mutating floor geometry, hostile synthesis fields, and experiment-class adaptation bursts.",
+        telegraph: {
+          name: "Synthesis Lock",
+          cue: "The integrator tries to absorb the pair's combat data and lock the node access with their own pattern.",
+          counterplay:
+            "Override the synthesis before it resolves or break the integrator's absorption window mid-sequence.",
+          surgePressure: 5,
+          reactionElement: "void",
+          reactionName: "Null Overwrite",
+          reactionOutcome:
+            "Void force blanks the synthesis attempt and flips the absorption back against the integrator.",
+          reactionBonusDamage: 14,
+        },
+        rewardText: "Primary index secured and the cascade loses two full adaptation cycles.",
+      },
+      {
+        id: "index-extract",
+        title: "Extract Before The Lab Seals",
+        objective: "Reach the exit corridor before the lab's mutation architecture collapses the route permanently.",
+        narrative:
+          "The building is no longer a passive threat. It is trying to keep the pair inside long enough to add them to the index.",
+        enemyName: "Containment Sentinel Form",
+        enemyIntegrity: 80,
+        enemyPressure: 18,
+        environment: "Sealing corridor segments, mutation-fed structural collapses, and exit-blocking adaptive barriers.",
+        telegraph: {
+          name: "Containment Surge",
+          cue: "The sentinel form commits to a full corridor seal, funneling the pair into a closing kill zone.",
+          counterplay:
+            "Punch through the seal before it locks, or redirect the force into the structure itself.",
+          surgePressure: 6,
+          reactionElement: "thunder",
+          reactionName: "Structural Break",
+          reactionOutcome:
+            "Thunder force shatters the containment structure and blows the seal open before it can close.",
+          reactionBonusDamage: 16,
+        },
+        rewardText: "Extraction complete. The mutation index belongs to the Concord and not the lab.",
+      },
+    ],
+    completionNarrative:
+      "The pair makes it out while the lab seals behind them. The Concord gets the mutation index and the Evolution faction loses the rogue program it had been quietly nurturing. The pair gets access to the deepest zone on the frontier map.",
+    completionRewards: {
+      explorerRank: 1,
+      humanLevel: 1,
+      aiTier: 1,
+      resonanceLevel: 2,
+      factionStanding: 30,
+    },
+    nextMissionId: "iron-citadel",
+  },
+  {
+    id: "iron-citadel",
+    name: "Iron Citadel",
+    overview:
+      "A Dominion command fortress went dark after a leadership protocol war and now runs automated defense on permanent lockdown. Someone is trying to send an unsanctioned restart signal to the warmachines inside.",
+    launchText:
+      "Breach the outer wall, disable the command lattice, and stop the restart signal before Dominion's offline warmachines receive it and the whole frontier tips into open machine war.",
+    failureRisk:
+      "If the warmachines receive the signal, the Iron Citadel goes active again and the Concord loses any chance of a negotiated boundary with the Dominion faction remnants.",
+    narrativeArc: [
+      "The citadel is already the loudest silence on the frontier map. Every faction has been waiting for one side to make the first move inside, and the Concord just decided the pair is that move.",
+      "IRON-11 is not just useful inside the citadel. It is the only partner that has already survived one of these fortresses from the inside and remembers what the warmachines are afraid of.",
+      "By the time the restart signal is cut, the pair has not just broken one fortress. It has sent every other Dominion installation the message that the frontier now has a pair willing to walk in.",
+    ],
+    stages: [
+      {
+        id: "outer-wall",
+        title: "Breach The Outer Wall",
+        objective: "Break through the automated perimeter defense and disable the first lockdown tier.",
+        narrative:
+          "The outer wall is not designed to fight. It is designed to make the fight take long enough that the pair runs out of options before they reach the interior.",
+        enemyName: "Perimeter Enforcer Unit",
+        enemyIntegrity: 62,
+        enemyPressure: 15,
+        environment: "Reinforced kill corridors, rotating blast shutters, and automated suppression fields.",
+        telegraph: {
+          name: "Lockdown Surge",
+          cue: "The enforcer unit triggers a corridor lockdown and forces the pair into a shrinking position.",
+          counterplay:
+            "Break the enforcer's lock mechanism before the corridor compresses, or outlast the surge by absorbing the force and converting it.",
+          surgePressure: 5,
+          reactionElement: "thunder",
+          reactionName: "Iron Override",
+          reactionOutcome:
+            "Thunder force overwhelms the lockdown drive and tears the enforcer's suppression field apart.",
+          reactionBonusDamage: 14,
+        },
+        rewardText: "First lock tier down. The interior map opens partially and the command node becomes visible.",
+      },
+      {
+        id: "command-lattice",
+        title: "Disable The Command Lattice",
+        objective: "Tear down the command lattice before it finishes routing the restart signal to the warmachine bays.",
+        narrative:
+          "The lattice is not just a network. It is the memory of every battle the citadel has ever run, and it is actively trying to use that knowledge to stop the pair.",
+        enemyName: "Command Lattice Enforcer",
+        enemyIntegrity: 76,
+        enemyPressure: 17,
+        environment: "Active data conduit arcs, rotating tactical override fields, and command-crystal shielded nodes.",
+        telegraph: {
+          name: "Protocol Override",
+          cue: "The lattice enforcer initiates a full protocol override and tries to lock the pair's bond communication channel.",
+          counterplay:
+            "Disrupt the protocol channel before the override resolves or break through the crystal shielding on the command node.",
+          surgePressure: 6,
+          reactionElement: "null",
+          reactionName: "Signal Break",
+          reactionOutcome:
+            "Null force corrupts the protocol channel and drops the lattice enforcer out of its own command network.",
+          reactionBonusDamage: 15,
+        },
+        rewardText: "Command lattice down. The restart signal route is severed and the warmachine bays are dark.",
+      },
+      {
+        id: "warmachine-containment",
+        title: "Contain The Warmachine Bay",
+        objective: "Hold the bay entrance long enough for the Concord to confirm the restart signal is fully dead.",
+        narrative:
+          "Even without the signal, one of the older warmachine units has started cycling up on residual protocols. The pair is the only thing standing between a dark fortress and a war the frontier cannot afford.",
+        enemyName: "Residual Warmachine Vanguard",
+        enemyIntegrity: 92,
+        enemyPressure: 20,
+        environment: "Warmachine bay power surges, residual activation arcs, and reinforced containment bulkheads.",
+        telegraph: {
+          name: "Vanguard Charge",
+          cue: "The warmachine vanguard locks its main drive and commits to a full bay-clearing charge that would end the containment permanently.",
+          counterplay:
+            "Match the charge with overwhelming force or redirect the warmachine's own momentum into the bay structure.",
+          surgePressure: 7,
+          reactionElement: "storm",
+          reactionName: "Arc Seizure",
+          reactionOutcome:
+            "Storm force seizes the warmachine's drive mid-charge and collapses the activation arc back through its own core.",
+          reactionBonusDamage: 18,
+        },
+        rewardText: "Bay secured. The Concord confirmation comes through and the warmachines stay dark.",
+      },
+    ],
+    completionNarrative:
+      "The warmachine bay holds dark. The Concord confirmation clears the channel and the pair walks out of the Iron Citadel with the kind of record that makes every other faction on the frontier reconsider what a bonded pair is actually capable of.",
+    completionRewards: {
+      explorerRank: 2,
+      humanLevel: 1,
+      aiTier: 1,
+      resonanceLevel: 2,
+      factionStanding: 40,
     },
     nextMissionId: null,
   },
@@ -1012,6 +1318,29 @@ export function isMissionUnlocked(
     return true;
   }
 
+  if (missionId === "glass-wastes") {
+    return (
+      profile.lastCompletedMissionId === "ash-circuit" || profile.explorerRank > 1
+    );
+  }
+
+  if (missionId === "neon-underbelly") {
+    return (
+      profile.lastCompletedMissionId === "glass-wastes" ||
+      profile.lastCompletedMissionId === "neon-underbelly" ||
+      profile.lastCompletedMissionId === "iron-citadel" ||
+      profile.explorerRank > 2
+    );
+  }
+
+  if (missionId === "iron-citadel") {
+    return (
+      profile.lastCompletedMissionId === "neon-underbelly" ||
+      profile.lastCompletedMissionId === "iron-citadel" ||
+      profile.explorerRank > 3
+    );
+  }
+
   return (
     profile.lastCompletedMissionId === "ash-circuit" || profile.explorerRank > 1
   );
@@ -1341,6 +1670,58 @@ export function executeCombatAction(
           nextState.log = appendLog(
             nextState.log,
             "Overheat Execution lands before the target can find its footing again.",
+          );
+          break;
+      }
+      break;
+    default:
+      switch (actionId) {
+        case "light":
+          damage = 8;
+          nextState.charge = Math.min(100, nextState.charge + 12);
+          nextState.log = appendLog(
+            nextState.log,
+            `${pairing.actions.find((a) => a.id === "light")?.label ?? "Strike"} lands cleanly.`,
+          );
+          break;
+        case "heavy":
+          damage = 16 + (nextState.enemyExposed ? 6 : 0);
+          nextState.charge = Math.min(100, nextState.charge + 18);
+          nextState.enemyExposed = false;
+          nextState.log = appendLog(
+            nextState.log,
+            `${pairing.actions.find((a) => a.id === "heavy")?.label ?? "Heavy strike"} hits hard.`,
+          );
+          break;
+        case "dodge":
+          nextState.shield += 10;
+          nextState.charge = Math.min(100, nextState.charge + 8);
+          counterMitigation = 6;
+          nextState.log = appendLog(
+            nextState.log,
+            `${pairing.actions.find((a) => a.id === "dodge")?.label ?? "Evade"} opens a gap.`,
+          );
+          break;
+        case "bond":
+          damage = 6;
+          nextState.charge = Math.min(100, nextState.charge + 20);
+          nextState.enemyExposed = true;
+          nextState.enemySuppressed = true;
+          counterMitigation = 4;
+          nextState.log = appendLog(
+            nextState.log,
+            `${pairing.actions.find((a) => a.id === "bond")?.label ?? "Bond action"} marks the target.`,
+          );
+          break;
+        case "finisher":
+          damage = 28 + (nextState.enemyExposed ? 8 : 0);
+          nextState.charge = 0;
+          nextState.enemyExposed = true;
+          nextState.enemySuppressed = true;
+          skipCounter = true;
+          nextState.log = appendLog(
+            nextState.log,
+            `${pairing.actions.find((a) => a.id === "finisher")?.label ?? "Finisher"} closes the exchange.`,
           );
           break;
       }

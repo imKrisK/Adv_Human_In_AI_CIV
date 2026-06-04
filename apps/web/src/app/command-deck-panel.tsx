@@ -29,6 +29,7 @@ import {
   type SessionServiceMissionEnvelope,
 } from "@/lib/session-service-contract";
 import { useAuthenticatedProfile } from "@/lib/use-authenticated-profile";
+import { applyEventOverride, type LiveEventOverride } from "@/lib/event-config-shared";
 
 function formatAuthStrategyLabel(value: "local-credentials" | "hosted-identity") {
   return value === "hosted-identity" ? "Hosted identity" : "Local credentials";
@@ -74,7 +75,11 @@ function formatElementLabel(value: string) {
   return value.charAt(0).toUpperCase() + value.slice(1);
 }
 
-export default function CommandDeckPanel() {
+export default function CommandDeckPanel({
+  liveEventOverride = null,
+}: {
+  liveEventOverride?: LiveEventOverride | null;
+}) {
   const router = useRouter();
   const {
     status,
@@ -120,7 +125,7 @@ export default function CommandDeckPanel() {
   const selectedMission =
     missionZones.find((mission) => mission.id === profile.selectedMissionId) ??
     missionZones[0];
-  const activeLiveEvent = resolveLiveEvent(firstLiveEvent);
+  const activeLiveEvent = resolveLiveEvent(applyEventOverride(firstLiveEvent, liveEventOverride));
   const liveEventMission =
     missionZones.find(
       (mission) => mission.id === activeLiveEvent.primaryMissionId,

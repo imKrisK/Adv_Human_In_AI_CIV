@@ -1,52 +1,61 @@
 # Executive Status Report
 
-Date: June 1, 2026
+Date: June 3, 2026
 
 ## Summary
 
-Adventure of Human in AI Civilization has moved out of concept-only planning and into a validated web-prototype phase. The current slice proves the core product identity: a human player bonded to an AI partner inside a pressure-driven, online co-op mission loop with persistent progression.
+Adventure of Human in AI Civilization has completed Phase 13 — the full production-foundation phase. The project has moved from a validated local prototype to a hosted-candidate baseline with real Clerk identity, Neon Postgres, live-ops event configuration, session-service extraction, and observability wiring. All 11 smoke tests pass in clerk-testing mode. The build is clean. Phase 14 is ready to begin.
 
-The project is green on slice validation and yellow on production readiness. Core experience risk is lower than it was at the start of the project. The main remaining risk is technical transition from a validated local prototype into a hosted service foundation.
+The project is **green on hosted infrastructure** and **green on slice validation**. The only open item gating a fully green CI lane is adding four GitHub Actions secrets (manual, no code change required).
 
 ## What Is Working Now
 
 - The core product direction is locked: web-first online co-op action RPG, not a full MMO and not a medieval reskin.
-- The first-playable world, faction, hub city, starter loadouts, and starter AI roster are documented and mirrored into the prototype.
-- The web prototype supports onboarding, bonded combat, persistence, squad formation, reconnect, host handoff, Glass Wastes event flow, telemetry surfaces, and playtest review.
-- The hosted identity path is now implemented in code with Clerk-backed sign-in and sign-up routes, callback sync into persistence, and hosted route guards.
-- Service boundaries, hosting baseline, migration runbook, environment contract, and production rollout order are defined.
+- 8 companions, 8 loadouts, 4 zones, 4 mission flows, 8 pairings, and 6 bond tiers are implemented and mirrored into the prototype.
+- The web prototype supports onboarding, bonded combat, persistence, squad formation, reconnect, host handoff, Glass Wastes event flow, telemetry surfaces, session recovery, and playtest review.
+- **Clerk hosted identity** is fully active: dev keys in place, sign-in/sign-up/callback routes wired, route guards enforced, smoke suite running in `clerk-testing` mode with `clerkSetup()` global setup.
+- **Neon Postgres** schema is synced (including `EventConfig` model); pooler and direct URLs configured; `prisma validate` passes on both SQLite and Postgres schemas.
+- **Session-service extraction** is complete: `session-service.ts` owns squad authority and mission-session read/write; `/api/session-service/*` routes pass in embedded and external-runtime rehearsal modes.
+- **Observability baseline** is wired: `/api/observability` triage endpoint, synthetic probe, mission lifecycle forwarding to PostHog when credentials are present.
+- **EventConfig live-ops path** is complete: `EventConfig` Prisma model on both schemas, `readEventConfig`/`writeEventConfig` server lib, `/api/admin/event-config` GET+PATCH auth-gated, command-deck applies override server-side at render time.
+- CI workflow updated with `pull_request:` trigger and full paths list.
 
 ## Evidence
 
-- `apps/web` currently reports no editor diagnostics.
-- The Playwright smoke suite passed 10 out of 10 checks on June 1, 2026 after the repo's local dev and smoke path was normalized to `localhost` on Windows.
-- `npm run lint` passed cleanly on June 1, 2026 after the same localhost normalization pass.
-- Smoke coverage currently exercises pitch, service map, squad readiness, host handoff, shared mission runtime, mission recovery, Ash Circuit progression, Glass Wastes progression, final recovery state, and logged four-player playtest output.
-- The `127.0.0.1` instability on Windows is now diagnosed: Next.js 16 plus Turbopack canonicalizes localhost-style hosts to `localhost` in development, so this repo now treats `localhost` as the supported local path.
+- `apps/web` reports no editor diagnostics.
+- Playwright smoke suite: **11/11 passed in 2.9 minutes** on June 3, 2026 in `clerk-testing` mode with real Clerk dev keys.
+- `npm run build` passes cleanly (TypeScript + Turbopack, no errors).
+- `npm run lint` passes cleanly.
+- `prisma validate` passes on `prisma/schema.prisma` (SQLite) and `prisma/schema.postgres.prisma` (Neon Postgres).
+- Smoke coverage: pitch, service map, squad readiness, host handoff, shared mission runtime, mission recovery, Ash Circuit progression, Glass Wastes progression, final recovery state, four-operator backlog log, and Clerk auth (2 operators).
 
 ## Current Risks
 
-- Hosted identity is implemented in code, but end-to-end staged validation is still blocked until real Clerk credentials are provisioned.
-- Durable runtime state is still backed by local SQLite assumptions rather than staged Neon Postgres.
-- Match-session authority still lives inside web app route handlers instead of a dedicated realtime or session boundary.
-- Live-ops tuning is still partially hardcoded in prototype data; the first admin control surface is not implemented yet.
-- The environment contract is defined, but the hosted credentials and staged deployment path are not yet fully wired.
+| Risk | Severity | Mitigation |
+|---|---|---|
+| GitHub Actions secrets not yet set | Low — CI hosted-candidate lane blocked, local lane green | Add 4 secrets at repo settings: `POSTGRES_DATABASE_URL`, `POSTGRES_DIRECT_DATABASE_URL`, `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`, `CLERK_SECRET_KEY` |
+| Staged observability proof (PostHog/Sentry) | Low — local contracts pass | Accepted Phase 14 follow-up; local baseline validated |
+| Session-service dedicated cloud runtime | Low — local external-runtime rehearsal green | Accepted Phase 14 ops ticket |
+| Free Neon tier auto-suspend | Low — first `db:push:postgres` may need retry (P1001) | Retry once after a few seconds; Neon wakes on connection |
 
-## Recommended Next Move
+## Phase 13 Exit Decision
 
-Do not spend the next phase on more content breadth. The slice already proved the game idea well enough to justify infrastructure work.
+**GO.** All four Phase 13 workstreams are complete in code and locally validated. The one remaining open item (GitHub Actions secrets) is a manual operations task with no code dependency, documented in `docs/11-phase-13-execution-board.md`.
 
-Phase 13 should focus on production-foundation implementation:
+## Phase 14 Intake
 
-1. Hosted identity integration.
-2. Neon Postgres runtime cutover for preview and staging.
-3. Match-session and presence extraction.
-4. PostHog, Sentry, and managed live-event configuration.
+First priorities entering Phase 14:
+
+1. **Add GitHub Actions secrets** — unblocks hosted-candidate CI lane (5-minute task).
+2. **Staged observability proof** — attach real PostHog/Sentry credentials to CI, verify mission events reach dashboards.
+3. **Session-service cloud deployment** — deploy extracted session service to Fly/Railway; validate health check from CI.
+4. **Combat tuning pass** — adjust stage difficulty, reward weights, and bond tier thresholds based on playtest data.
+5. **Phase 14 content scope unlock** — PvP strand, second hub city, expanded faction roster (frozen through Phase 13).
 
 ## Collaborator Ask
 
-The next collaborator decisions should be operational, not conceptual:
+The next collaborator decisions are operational:
 
-1. Confirm owners for Clerk, Neon, Fly, Upstash, PostHog, and Sentry setup.
-2. Agree whether Phase 13 is executed as one infrastructure branch or as four staged workstreams.
-3. Keep new gameplay scope frozen until the hosted baseline can run the current slice reliably.
+1. Add the four GitHub Actions secrets (owner: anyone with repo admin access; 5 minutes).
+2. Decide deployment target for extracted session service (Fly, Railway, or Vercel function — affects Phase 14 ops tickets).
+3. Confirm PostHog and Sentry project credentials for staged observability proof.

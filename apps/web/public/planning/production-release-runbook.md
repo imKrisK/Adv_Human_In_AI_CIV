@@ -124,12 +124,15 @@ Rollback stop:
 
 - Confirm PostHog receives production events after the web deploy.
 - Confirm Sentry receives release-tagged traces or error events.
+- Confirm `/api/observability` reports the expected release tag, provider mode, and triage paths on the promoted build.
+- Run the authenticated synthetic `POST /api/observability` check once the release is live so both analytics and handled-error delivery have fresh audit evidence.
 - Check that logs from Vercel and Fly are tagged to the new release.
 
 Smoke gate:
 
 - one successful operator session appears in PostHog
 - one intentional handled check or release marker appears in Sentry
+- `/api/observability` returns the promoted release id and the expected provider mode for analytics and error tracking
 
 Rollback stop:
 

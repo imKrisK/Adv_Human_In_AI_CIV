@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
 
-import { firstFaction, hubCity, starterCompanions } from "@/lib/prototype-data";
+import {
+  bondTierDefinitions,
+  firstFaction,
+  hubCity,
+  starterCompanions,
+} from "@/lib/prototype-data";
 
 import FieldGuideEventSummary from "./field-guide-event-summary";
 
@@ -15,7 +20,7 @@ export default function FieldGuidePage() {
       <section className="glass-panel rounded-[2rem] p-8 md:p-10">
         <p className="section-kicker">Companion-first world foundation</p>
         <h1 className="section-title mt-4 font-semibold tracking-tight">
-          One sponsor faction. One machine sanctuary. Three build-defining AI partners.
+          One sponsor faction. One machine sanctuary. Eight build-defining AI partners.
         </h1>
         <p className="muted-copy mt-6 max-w-3xl text-lg leading-8">
           The first playable does not begin with a zoo of disposable companions.
@@ -91,10 +96,11 @@ export default function FieldGuidePage() {
       <section className="glass-panel rounded-[2rem] p-8">
         <p className="section-kicker">Build-defining AI companions</p>
         <p className="muted-copy mt-4 max-w-3xl text-sm leading-7">
-          Each starter partner is meant to read as a co-agent with a distinct
-          combat logic and public identity, not as a passive stat bonus.
+          Eight AI partners across five factions, each with a distinct combat logic,
+          political alignment, and public identity. Choose one and that choice defines
+          the pair&#39;s role, element, and diplomatic standing on the frontier.
         </p>
-        <div className="mt-5 grid gap-4 lg:grid-cols-3">
+        <div className="mt-5 grid gap-4 lg:grid-cols-4">
           {starterCompanions.map((companion) => (
             <article
               key={companion.name}
@@ -132,6 +138,43 @@ export default function FieldGuidePage() {
       </section>
 
       <FieldGuideEventSummary />
+
+      <section className="glass-panel rounded-[2rem] p-8">
+        <p className="section-kicker">Bond progression tiers</p>
+        <p className="muted-copy mt-4 max-w-3xl text-sm leading-7">
+          Bond depth is not a bar that fills. It is a shared frequency that either
+          stabilizes or fractures under pressure. Each tier unlocks new capabilities
+          for both partners and reshapes the pair&#39;s presence on the frontier.
+        </p>
+        <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {bondTierDefinitions.map((tier) => (
+            <article
+              key={tier.id}
+              className="rounded-[1.75rem] border border-[color:var(--line)] bg-white/70 p-6"
+            >
+              <p className="font-mono text-xs uppercase tracking-[0.18em] text-[color:var(--muted)]">
+                Resonance ≥ {tier.resonanceThreshold} · AI tier {tier.aiTierRequired}+
+              </p>
+              <h3 className="mt-3 text-xl font-semibold">{tier.name}</h3>
+              <p className="muted-copy mt-3 text-sm leading-6">{tier.summary}</p>
+              <div className="mt-5 space-y-3 text-sm leading-6">
+                <p>
+                  <span className="font-semibold">Human unlock:</span>{" "}
+                  {tier.humanUnlock}
+                </p>
+                <p>
+                  <span className="font-semibold">AI unlock:</span>{" "}
+                  {tier.aiUnlock}
+                </p>
+                <p className="rounded-[1rem] border border-[color:var(--accent-teal)] bg-[rgba(13,122,122,0.07)] px-3 py-2 text-[color:var(--accent-teal)]">
+                  <span className="font-semibold">Bond unlock:</span>{" "}
+                  {tier.bondUnlock}
+                </p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
     </div>
   );
 }

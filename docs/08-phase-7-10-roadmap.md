@@ -112,7 +112,7 @@ Cross-workstream closeout: P13-10 is the shared exit review after all four works
 | P13-05 | In Progress | Enforce hosted environment contract as a release gate. | Hosted-candidate promotion is blocked when required env keys are missing or invalid, and passes when complete. |
 | P13-06 | In Progress | Add hosted-candidate smoke coverage in CI. | CI requires both local smoke and hosted-candidate smoke before merge; local smoke is standardized on localhost for Windows stability, while hosted-candidate validation still waits on real secrets. |
 | P13-07 | In Progress (local boundary validated) | Extract first session-service runtime skeleton. | A staged service boundary handles health checks and one validated session job path, building on the already-green local extracted mission routes. |
-| P13-08 | Next | Enable hosted observability baseline. | PostHog and Sentry receive staged traffic with release tagging and actionable error traces. |
+| P13-08 | In Progress (local baseline implemented) | Enable hosted observability baseline. | Release-tagged observability status, triage JSON, synthetic probe path, and mission lifecycle forwarding are implemented locally; staged PostHog and Sentry proof still depends on real hosted secrets. |
 | P13-09 | Next | Add minimum live-ops event configuration path. | Concord Breach timing or modifier values can be changed in staging without a redeploy. |
 | P13-10 | Next | Run Phase 13 exit review and go or no-go decision. | A full staging rehearsal and evidence pack confirms readiness for Phase 14 implementation intake. |
 

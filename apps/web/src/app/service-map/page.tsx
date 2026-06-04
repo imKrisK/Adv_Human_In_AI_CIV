@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { readEnvironmentContractStatus } from "@/lib/environment-contract";
+import { readObservabilityStatus } from "@/lib/observability";
 
 import {
   executionChecklist,
@@ -41,8 +42,20 @@ const environmentContractClassName = {
   blocked: "status-chip status-next",
 } as const;
 
-export default function ServiceMapPage() {
+const observabilityProviderClassName = {
+  active: "status-chip status-done",
+  placeholder: "status-chip status-next",
+  missing: "status-chip status-later",
+} as const;
+
+export const dynamic = "force-dynamic";
+
+export default async function ServiceMapPage() {
   const environmentContractStatus = readEnvironmentContractStatus();
+  const observabilityStatus = await readObservabilityStatus();
+  const observabilityReady =
+    observabilityStatus.analytics.mode === "active" &&
+    observabilityStatus.errorTracking.mode === "active";
 
   return (
     <div className="main-shell space-y-10 py-10 md:py-14">
@@ -277,6 +290,118 @@ export default function ServiceMapPage() {
                 ))}
               </div>
             )}
+          </div>
+        </div>
+      </section>
+
+      <section className="glass-panel rounded-[2rem] p-8" data-testid="service-map-observability">
+        <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+          <div>
+            <p className="section-kicker">Phase 13 observability baseline</p>
+            <h2 className="text-3xl font-semibold">
+              Mirror mission lifecycle events into hosted analytics and keep one release-tagged error check ready.
+            </h2>
+          </div>
+          <span
+            className={
+              observabilityReady
+                ? environmentContractClassName.ready
+                : environmentContractClassName.blocked
+            }
+          >
+            {observabilityReady ? "Ready" : "Needs staged provider wiring"}
+          </span>
+        </div>
+        <p className="muted-copy mt-4 max-w-4xl text-sm leading-7">
+          {observabilityStatus.headline}
+        </p>
+        <div className="mt-5 grid gap-4 lg:grid-cols-[0.95fr_1.05fr]">
+          <div className="rounded-[1.5rem] border border-[color:var(--line)] bg-white/72 p-5 text-sm leading-7">
+            <div className="flex flex-wrap gap-2 text-xs">
+              <span className="data-chip" data-testid="service-map-observability-release">
+                Release: {observabilityStatus.release}
+              </span>
+              <span className="data-chip" data-testid="service-map-observability-analytics">
+                Analytics: {observabilityStatus.analytics.mode}
+              </span>
+              <span className="data-chip" data-testid="service-map-observability-errors">
+                Errors: {observabilityStatus.errorTracking.mode}
+              </span>
+              <span className="data-chip" data-testid="service-map-observability-triage">
+                Triage: {observabilityStatus.triage.queryPath}
+              </span>
+            </div>
+            <p className="mt-4">
+              Mission lifecycle forwarding is scoped to {observabilityStatus.telemetryForwardingEventTypes.join(", ")}.
+            </p>
+            <p className="muted-copy mt-3">{observabilityStatus.nextStep}</p>
+            <div className="mt-5 flex flex-wrap gap-3 text-sm font-medium">
+              <a
+                href="/api/observability"
+                target="_blank"
+                rel="noreferrer"
+                className="rounded-full border border-[color:var(--line)] bg-white/70 px-5 py-3 transition hover:border-[color:var(--accent-teal)] hover:bg-white"
+              >
+                Open observability JSON
+              </a>
+            </div>
+          </div>
+          <div className="space-y-4">
+            <article className="rounded-[1.5rem] border border-[color:var(--line)] bg-white/72 p-5 text-sm leading-7">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="font-semibold">PostHog mission lifecycle forwarding</p>
+                  <p className="muted-copy mt-2">{observabilityStatus.analytics.reason}</p>
+                </div>
+                <span className={observabilityProviderClassName[observabilityStatus.analytics.mode]}>
+                  {observabilityStatus.analytics.mode}
+                </span>
+              </div>
+              <div className="mt-4 rounded-[1.25rem] border border-[color:var(--line)] bg-white/80 p-4">
+                <p className="font-semibold">Capture endpoint</p>
+                <p className="muted-copy mt-2">
+                  {observabilityStatus.analytics.endpoint ?? "No active PostHog capture endpoint yet."}
+                </p>
+              </div>
+              <div className="mt-4 rounded-[1.25rem] border border-[color:var(--line)] bg-white/80 p-4">
+                <p className="font-semibold">Latest synthetic check</p>
+                <p className="muted-copy mt-2">
+                  {observabilityStatus.analytics.latestAudit
+                    ? `${observabilityStatus.analytics.latestAudit.delivery} at ${new Date(
+                        observabilityStatus.analytics.latestAudit.createdAt,
+                      ).toLocaleString()}: ${observabilityStatus.analytics.latestAudit.detail}`
+                    : "No synthetic PostHog check has been recorded yet."}
+                </p>
+              </div>
+            </article>
+
+            <article className="rounded-[1.5rem] border border-[color:var(--line)] bg-white/72 p-5 text-sm leading-7">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="font-semibold">Sentry handled error check</p>
+                  <p className="muted-copy mt-2">{observabilityStatus.errorTracking.reason}</p>
+                </div>
+                <span className={observabilityProviderClassName[observabilityStatus.errorTracking.mode]}>
+                  {observabilityStatus.errorTracking.mode}
+                </span>
+              </div>
+              <div className="mt-4 rounded-[1.25rem] border border-[color:var(--line)] bg-white/80 p-4">
+                <p className="font-semibold">Envelope endpoint</p>
+                <p className="muted-copy mt-2">
+                  {observabilityStatus.errorTracking.endpoint ?? "No active Sentry envelope endpoint yet."}
+                </p>
+              </div>
+              <div className="mt-4 rounded-[1.25rem] border border-[color:var(--line)] bg-white/80 p-4">
+                <p className="font-semibold">Latest synthetic check</p>
+                <p className="muted-copy mt-2">
+                  {observabilityStatus.errorTracking.latestAudit
+                    ? `${observabilityStatus.errorTracking.latestAudit.delivery} at ${new Date(
+                        observabilityStatus.errorTracking.latestAudit.createdAt,
+                      ).toLocaleString()}: ${observabilityStatus.errorTracking.latestAudit.detail}`
+                    : "No synthetic Sentry check has been recorded yet."}
+                </p>
+              </div>
+            </article>
           </div>
         </div>
       </section>

@@ -13,7 +13,7 @@
     "db:generate": "prisma generate",
     "db:generate:postgres": "prisma generate --config prisma.postgres.config.ts",
     "db:push": "prisma db push && prisma generate",
-    "db:push:postgres": "prisma db push --config prisma.postgres.config.ts --skip-generate && npm run db:generate:postgres",
+    "db:push:postgres": "prisma db push --config prisma.postgres.config.ts && npm run db:generate:postgres",
     "db:validate:postgres": "prisma validate --config prisma.postgres.config.ts",
     "db:migrate:postgres:create": "prisma migrate dev --config prisma.postgres.config.ts --create-only --skip-generate",
     "db:migrate:postgres:deploy": "prisma migrate deploy --config prisma.postgres.config.ts"

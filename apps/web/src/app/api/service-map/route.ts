@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { readEnvironmentContractStatus } from "@/lib/environment-contract";
+import { readObservabilityStatus } from "@/lib/observability";
 
 import {
   executionChecklist,
@@ -10,6 +11,8 @@ import {
   serviceBoundaries,
 } from "@/lib/prototype-data";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   return NextResponse.json({
     productSurfaces,
@@ -18,5 +21,6 @@ export async function GET() {
     executionChecklist,
     planningAssets,
     environmentContractStatus: readEnvironmentContractStatus(),
+    observabilityStatus: await readObservabilityStatus(),
   });
 }
