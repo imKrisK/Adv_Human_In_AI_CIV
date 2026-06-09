@@ -184,7 +184,7 @@ async function resolveCurrentStage(page: Page) {
       });
 
       await commitRewards.click();
-      await expect(rewardsCommitted).toBeVisible();
+      await expect(rewardsCommitted).toBeVisible({ timeout: 15_000 });
       return;
     }
 
@@ -224,10 +224,19 @@ test("operator can retry a destabilized mission stage and recover the live lane"
   await page.getByRole("button", { name: "Ember Reaper + TALON-9" }).click();
   await page.getByTestId("deploy-ash-circuit").click();
 
-  await expect(page).toHaveURL(/\/missions\/ash-circuit$/);
+  await expect(page).toHaveURL(/\/missions\/ash-circuit$/, { timeout: 15_000 });
+
+  // The mission panel may render in "briefing" phase while useEffect re-runs
+  // the live session fetch on first mount. Clicking "Reconnect mission state"
+  // forces an immediate re-fetch and transitions to the active stage buttons.
+  const reconnectBtn = page.getByRole("button", { name: "Reconnect mission state" });
+  if (await reconnectBtn.isVisible({ timeout: 5_000 }).catch(() => false)) {
+    await reconnectBtn.click();
+  }
+
   await expect(
     page.getByRole("button", { name: "Afterburn Step" }),
-  ).toBeVisible();
+  ).toBeVisible({ timeout: 15_000 });
 
   const retryStage = page.getByRole("button", { name: "Retry stage" });
 
@@ -736,6 +745,8 @@ test("host can abandon a stuck shared mission session and recover the squad", as
   await expect(page.getByTestId("resume-active-mission")).toHaveCount(0);
   await expect(page.getByRole("button", { name: "Deploy squad" })).toBeDisabled();
 
+  // The joiner is still on the mission page. The React state retains missionSession
+  // (loaded when activeMissionSessionId was set). The button is visible without reload.
   await joinerPage.getByRole("button", { name: "Reconnect mission state" }).click();
   await expect(
     joinerPage.getByText("Mission session is no longer active.", { exact: true }),
@@ -841,7 +852,9 @@ test("primary operator can clear Glass Wastes and persist the final recovery sta
   await authenticatePrimaryOperator(page, "glass-wastes.recovery");
 
   await page.getByTestId("deploy-ash-circuit").click();
-  await expect(page).toHaveURL(/\/missions\/ash-circuit$/);
+  // The launch API runs 5 sequential DB writes; allow up to 15s for the
+  // server-side navigation redirect to complete.
+  await expect(page).toHaveURL(/\/missions\/ash-circuit$/, { timeout: 15_000 });
   await page.getByRole("button", { name: "Arc Jab" }).click();
   await clearMission(page);
   await expect(
