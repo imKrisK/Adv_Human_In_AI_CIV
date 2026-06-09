@@ -222,6 +222,8 @@ test("operator can retry a destabilized mission stage and recover the live lane"
   await authenticatePrimaryOperator(page, "retry-stage.primary");
 
   await page.getByRole("button", { name: "Ember Reaper + TALON-9" }).click();
+  // activatePairing is async — wait for the deploy button to be enabled before clicking
+  await expect(page.getByTestId("deploy-ash-circuit")).toBeEnabled({ timeout: 10_000 });
   await page.getByTestId("deploy-ash-circuit").click();
 
   await expect(page).toHaveURL(/\/missions\/ash-circuit$/, { timeout: 15_000 });

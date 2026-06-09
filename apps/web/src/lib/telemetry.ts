@@ -165,6 +165,92 @@ const starterBuildBalanceTargets: Record<
     finalIntegrity: { min: 50, max: 85 },
     reactionRate: { min: 60, max: 90 },
   },
+  // Phase 14 — Preservation expansion
+  "drift-echo": {
+    actionsPerClear: { min: 8, max: 13 },
+    finalIntegrity: { min: 60, max: 92 },
+    reactionRate: { min: 65, max: 90 },
+  },
+  "prism-veil": {
+    actionsPerClear: { min: 9, max: 14 },
+    finalIntegrity: { min: 65, max: 95 },
+    reactionRate: { min: 70, max: 95 },
+  },
+  // Phase 14 — Evolution expansion
+  "acid-bloom": {
+    actionsPerClear: { min: 6, max: 10 },
+    finalIntegrity: { min: 30, max: 65 },
+    reactionRate: { min: 55, max: 82 },
+  },
+  "surge-mutation": {
+    actionsPerClear: { min: 7, max: 11 },
+    finalIntegrity: { min: 40, max: 70 },
+    reactionRate: { min: 60, max: 88 },
+  },
+  // Phase 14 — Dominion expansion
+  "chain-herald": {
+    actionsPerClear: { min: 8, max: 12 },
+    finalIntegrity: { min: 45, max: 78 },
+    reactionRate: { min: 58, max: 86 },
+  },
+  "flare-apex": {
+    actionsPerClear: { min: 7, max: 11 },
+    finalIntegrity: { min: 38, max: 72 },
+    reactionRate: { min: 52, max: 82 },
+  },
+  // Phase 14 — Harmony expansion
+  "pulse-mirror": {
+    actionsPerClear: { min: 8, max: 12 },
+    finalIntegrity: { min: 55, max: 88 },
+    reactionRate: { min: 62, max: 92 },
+  },
+  "bloom-synthesis": {
+    actionsPerClear: { min: 9, max: 13 },
+    finalIntegrity: { min: 60, max: 90 },
+    reactionRate: { min: 65, max: 93 },
+  },
+  "resonance-forge": {
+    actionsPerClear: { min: 10, max: 15 },
+    finalIntegrity: { min: 58, max: 88 },
+    reactionRate: { min: 68, max: 94 },
+  },
+  // Phase 14 — Fracture expansion
+  "rust-grave": {
+    actionsPerClear: { min: 6, max: 11 },
+    finalIntegrity: { min: 25, max: 60 },
+    reactionRate: { min: 48, max: 78 },
+  },
+  "neon-phantom": {
+    actionsPerClear: { min: 7, max: 12 },
+    finalIntegrity: { min: 40, max: 72 },
+    reactionRate: { min: 63, max: 90 },
+  },
+  "dusk-wraith": {
+    actionsPerClear: { min: 7, max: 11 },
+    finalIntegrity: { min: 35, max: 68 },
+    reactionRate: { min: 60, max: 88 },
+  },
+  // Phase 14 — Cross-faction
+  "arc-prism": {
+    actionsPerClear: { min: 8, max: 13 },
+    finalIntegrity: { min: 50, max: 83 },
+    reactionRate: { min: 62, max: 91 },
+  },
+  "ion-null": {
+    actionsPerClear: { min: 7, max: 12 },
+    finalIntegrity: { min: 45, max: 78 },
+    reactionRate: { min: 60, max: 90 },
+  },
+  "grav-forge": {
+    actionsPerClear: { min: 9, max: 14 },
+    finalIntegrity: { min: 55, max: 85 },
+    reactionRate: { min: 65, max: 92 },
+  },
+  "mirror-fracture": {
+    actionsPerClear: { min: 8, max: 12 },
+    finalIntegrity: { min: 42, max: 75 },
+    reactionRate: { min: 58, max: 88 },
+  },
 };
 
 function serializeTelemetryContext(

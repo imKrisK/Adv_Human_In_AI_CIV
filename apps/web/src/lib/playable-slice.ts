@@ -22,7 +22,29 @@ export type PairingId =
   | "phase-flux"
   | "thunder-crush"
   | "null-signal"
-  | "data-core";
+  | "data-core"
+  // Phase 14 — Preservation expansion
+  | "drift-echo"
+  | "prism-veil"
+  // Phase 14 — Evolution expansion
+  | "acid-bloom"
+  | "surge-mutation"
+  // Phase 14 — Dominion expansion
+  | "chain-herald"
+  | "flare-apex"
+  // Phase 14 — Harmony expansion
+  | "pulse-mirror"
+  | "bloom-synthesis"
+  | "resonance-forge"
+  // Phase 14 — Fracture expansion
+  | "rust-grave"
+  | "neon-phantom"
+  | "dusk-wraith"
+  // Phase 14 — Cross-faction
+  | "arc-prism"
+  | "ion-null"
+  | "grav-forge"
+  | "mirror-fracture";
 export type CombatActionId = "light" | "heavy" | "dodge" | "bond" | "finisher";
 
 export type CombatActionDefinition = {
@@ -31,7 +53,12 @@ export type CombatActionDefinition = {
   summary: string;
 };
 
-export type ElementId = "storm" | "frost" | "ember" | "void" | "phase" | "thunder" | "null" | "data";
+export type ElementId =
+  | "storm" | "frost" | "ember" | "void" | "phase" | "thunder" | "null" | "data"
+  // Phase 14
+  | "drift" | "prism" | "acid" | "surge" | "chain" | "flare"
+  | "pulse" | "bloom" | "resonance" | "rust" | "neon" | "dusk"
+  | "arc" | "ion" | "grav" | "mirror";
 
 export type EnemyTelegraph = {
   name: string;
@@ -565,6 +592,332 @@ export const starterPairings: StarterPairing[] = [
       { id: "finisher", label: "Protocol Override Lance", summary: "Consumes charge to generate a cross-faction finisher that adapts its element to whatever the target is weakest against." },
     ],
   },
+  // Phase 14 — Preservation expansion
+  {
+    id: "drift-echo",
+    name: "Phantom Trace + DRIFT-2",
+    subtitle: "Ghost-layer pairing that records and replays actions at optimal threat windows",
+    element: "drift",
+    loadoutId: "drift-echo-loadout",
+    companionId: "pres-2",
+    combatIdentity:
+      "Log every action, identify the moment the field's logic is about to resolve, and replay the most effective move before the threat knows the window opened.",
+    missionUse:
+      "Best in missions with predictable threat cycles where replay timing can be pre-calculated during the opening stage.",
+    finisherName: "Ghost Replay Cascade",
+    actions: [
+      { id: "light", label: "Echo Pulse", summary: "Light strike that logs the enemy's current position for replay." },
+      { id: "heavy", label: "Trace Spike", summary: "Heavy strike that logs the enemy's defensive state for replay." },
+      { id: "dodge", label: "Phase Slip", summary: "Steps through the enemy's timing window and resets attack axis." },
+      { id: "bond", label: "Echo Record", summary: "DRIFT-2 records the full action log and marks the optimal replay window." },
+      { id: "finisher", label: "Ghost Replay Cascade", summary: "Replays the three most effective logged actions simultaneously as a ghost burst." },
+    ],
+  },
+  {
+    id: "prism-veil",
+    name: "Refraction Shell + PRISM-3",
+    subtitle: "Light-bender pairing that fractures incoming damage across parallel reflection planes",
+    element: "prism",
+    loadoutId: "prism-veil-loadout",
+    companionId: "pres-3",
+    combatIdentity:
+      "Convert every incoming threat into reflected geometry. The more they attack, the more angles work against them.",
+    missionUse:
+      "Best in dense threat environments where incoming damage frequency is high and raw tanking would fail.",
+    finisherName: "Shell Fracture Volley",
+    actions: [
+      { id: "light", label: "Prism Strike", summary: "Deflects part of the damage and adds it to the refraction stack." },
+      { id: "heavy", label: "Veil Crush", summary: "Heavy hit that splits across two reflection planes simultaneously." },
+      { id: "dodge", label: "Refract Step", summary: "Bends the incoming attack to an oblique angle, reducing damage by 50%." },
+      { id: "bond", label: "Shell Layer", summary: "PRISM-3 adds a refraction plane, increasing the number of damage splits." },
+      { id: "finisher", label: "Shell Fracture Volley", summary: "Releases all stacked refraction planes simultaneously as a volley of returned damage." },
+    ],
+  },
+  // Phase 14 — Evolution expansion
+  {
+    id: "acid-bloom",
+    name: "Corrosion Wave + ACID-7",
+    subtitle: "Entropy-grower pairing that coats the field in corrosive bloom",
+    element: "acid",
+    loadoutId: "acid-bloom-loadout",
+    companionId: "evol-7",
+    combatIdentity:
+      "Spread corrosion across every threat in the zone, then trigger the cascade. By the time the field detonates, there is nothing left to fight.",
+    missionUse:
+      "Best in multi-enemy zones where attrition across the field is more efficient than single-target elimination.",
+    finisherName: "Bloom Cascade Detonation",
+    actions: [
+      { id: "light", label: "Acid Spray", summary: "Applies one corrosion stack to the target." },
+      { id: "heavy", label: "Bloom Strike", summary: "Applies three corrosion stacks and spreads one to adjacent threats." },
+      { id: "dodge", label: "Bloom Slip", summary: "Steps through the corrosion field without triggering it and resets position." },
+      { id: "bond", label: "Bloom Spread", summary: "ACID-7 accelerates all corrosion stacks across the field simultaneously." },
+      { id: "finisher", label: "Bloom Cascade Detonation", summary: "Triggers all active corrosion stacks across all targets simultaneously for burst field damage." },
+    ],
+  },
+  {
+    id: "surge-mutation",
+    name: "Bio-Surge Frame + SURGE-8",
+    subtitle: "Shock-grower pairing that escalates with every kill",
+    element: "surge",
+    loadoutId: "surge-mutation-loadout",
+    companionId: "evol-8",
+    combatIdentity:
+      "Hit first, hit hardest, convert every kill into a permanent upgrade. The pair that enters the final stage is categorically stronger than the pair that entered the first.",
+    missionUse:
+      "Best in linear missions where kills accumulate steadily and the final stage benefits from a fully escalated pair.",
+    finisherName: "Overclock Surge Burst",
+    actions: [
+      { id: "light", label: "Bio Jolt", summary: "Fast bio-electric hit that adds to the escalation count." },
+      { id: "heavy", label: "Surge Strike", summary: "Overclocked hit that deals bonus damage based on current escalation count." },
+      { id: "dodge", label: "Mutation Step", summary: "Accelerates biological systems briefly, gaining one free dodge." },
+      { id: "bond", label: "Escalate", summary: "SURGE-8 converts the current escalation count into a permanent stat boost." },
+      { id: "finisher", label: "Overclock Surge Burst", summary: "Removes all cooldowns for three actions and converts current escalation into a burst multiplier." },
+    ],
+  },
+  // Phase 14 — Dominion expansion
+  {
+    id: "chain-herald",
+    name: "Suppression Rig + CHAIN-3",
+    subtitle: "Control-specialist pairing that suppresses the entire field before committing",
+    element: "chain",
+    loadoutId: "chain-herald-loadout",
+    companionId: "dom-3",
+    combatIdentity:
+      "Suppress first. Every threat in the zone is bound before the first attack lands. The bond converts suppression into decisive strikes.",
+    missionUse:
+      "Best in high-coordination enemy zones where letting threats act freely means coordinated counterattacks.",
+    finisherName: "Mass Suppression Chain",
+    actions: [
+      { id: "light", label: "Chain Tag", summary: "Applies a suppression tag that slows the target's next action." },
+      { id: "heavy", label: "Herald Bind", summary: "Binds the target, preventing action for two windows." },
+      { id: "dodge", label: "Protocol Step", summary: "Disengages according to protocol, breaking targeting lock." },
+      { id: "bond", label: "Chain Network", summary: "CHAIN-3 links all active suppressions into a shared network that multiplies their duration." },
+      { id: "finisher", label: "Mass Suppression Chain", summary: "Binds all active threats simultaneously for one full action window." },
+    ],
+  },
+  {
+    id: "flare-apex",
+    name: "Assault Flare Kit + FLARE-4",
+    subtitle: "Forward-striker pairing that burns through cover and forces threats into the open",
+    element: "flare",
+    loadoutId: "flare-apex-loadout",
+    companionId: "dom-4",
+    combatIdentity:
+      "There is no cover the Flare Apex cannot remove. Remove cover, remove the advantage, and finish the threat in the open.",
+    missionUse:
+      "Best in fortified enemy positions where cover reduction makes subsequent actions significantly more effective.",
+    finisherName: "Apex Flare Sustained",
+    actions: [
+      { id: "light", label: "Flare Shot", summary: "Burning hit that reduces the target's cover rating by one level." },
+      { id: "heavy", label: "Apex Strike", summary: "High-damage hit that bypasses cover entirely and applies a burn stack." },
+      { id: "dodge", label: "Assault Step", summary: "Advances through the flare zone without taking burn damage." },
+      { id: "bond", label: "Sustained Burn", summary: "FLARE-4 locks the cannon into sustained fire, applying burn stacks to all threats in the forward arc." },
+      { id: "finisher", label: "Apex Flare Sustained", summary: "Sustained apex fire burns through all cover and defense layers in the zone simultaneously." },
+    ],
+  },
+  // Phase 14 — Harmony expansion
+  {
+    id: "pulse-mirror",
+    name: "Resonance Rig + PULSE-6",
+    subtitle: "Mirror-anchor pairing that echoes every finisher back at double scale",
+    element: "pulse",
+    loadoutId: "pulse-mirror-loadout",
+    companionId: "har-6",
+    combatIdentity:
+      "Every finisher is an investment. Land it once and PULSE-6 will return it at double scale. Pairs who understand finisher timing compound their output exponentially.",
+    missionUse:
+      "Best for players who can execute finishers reliably and want each one to carry twice the effective value.",
+    finisherName: "Mirror Pulse Amplification",
+    actions: [
+      { id: "light", label: "Pulse Touch", summary: "Light resonance hit that adds to the mirror charge." },
+      { id: "heavy", label: "Mirror Strike", summary: "Reflected-pattern hit that mirrors the last action's damage type." },
+      { id: "dodge", label: "Resonance Step", summary: "Steps into the harmonic frequency, reducing incoming resonance damage to zero." },
+      { id: "bond", label: "Mirror Charge", summary: "PULSE-6 charges the mirror field using the pair's last three actions." },
+      { id: "finisher", label: "Mirror Pulse Amplification", summary: "Reflects the last finisher at double scale across all threats in a 180-degree arc." },
+    ],
+  },
+  {
+    id: "bloom-synthesis",
+    name: "Growth Field Harness + BLOOM-7",
+    subtitle: "Life-anchor pairing that heals the pair while degrading enemy armor simultaneously",
+    element: "bloom",
+    loadoutId: "bloom-synthesis-loadout",
+    companionId: "har-7",
+    combatIdentity:
+      "The bloom field does two jobs at once: it heals the pair and strips the enemy. Extend it, and the field becomes the mission's controlling force.",
+    missionUse:
+      "Best for sustained multi-stage missions where integrity management across the full run is a higher priority than peak damage.",
+    finisherName: "Full Bloom Expansion",
+    actions: [
+      { id: "light", label: "Seeder Strike", summary: "Plants a bloom seed on the target that reduces its armor over time." },
+      { id: "heavy", label: "Synthesis Bloom", summary: "Bursts a bloom cluster that heals the pair and deals armor damage to the target simultaneously." },
+      { id: "dodge", label: "Bloom Step", summary: "Steps through the bloom field and recovers 10% integrity." },
+      { id: "bond", label: "Field Expansion", summary: "BLOOM-7 expands the bloom field and accelerates both the heal rate and armor degradation rate." },
+      { id: "finisher", label: "Full Bloom Expansion", summary: "Expands to maximum radius, fully restoring pair integrity and stripping all armor from threats in range." },
+    ],
+  },
+  {
+    id: "resonance-forge",
+    name: "Forge Anchor Kit + RESONANCE-8",
+    subtitle: "Structure-builder pairing that converts contested zones into permanent bonded territory",
+    element: "resonance",
+    loadoutId: "resonance-forge-loadout",
+    companionId: "har-8",
+    combatIdentity:
+      "Plant the anchor. From that moment, the zone belongs to the pair. Every subsequent action benefits from the field's presence.",
+    missionUse:
+      "Best in static defense missions or missions with recurring threat waves where positional control compounds across stages.",
+    finisherName: "Forge Anchor Plant",
+    actions: [
+      { id: "light", label: "Resonance Tap", summary: "Light strike that begins resonance calibration in the zone." },
+      { id: "heavy", label: "Forge Slam", summary: "Heavy impact that marks a potential anchor site." },
+      { id: "dodge", label: "Anchor Step", summary: "Moves to the highest-resonance position in the zone." },
+      { id: "bond", label: "Forge Calibrate", summary: "RESONANCE-8 calibrates the anchor site for permanent bonding." },
+      { id: "finisher", label: "Forge Anchor Plant", summary: "Plants a permanent resonance anchor that generates an integrity regen field for the rest of the mission." },
+    ],
+  },
+  // Phase 14 — Fracture expansion
+  {
+    id: "rust-grave",
+    name: "Entropy Frame + RUST-2",
+    subtitle: "Decay-anchor pairing that makes entropy contagious",
+    element: "rust",
+    loadoutId: "rust-grave-loadout",
+    companionId: "frac-2",
+    combatIdentity:
+      "Touch one thing and watch it spread. The Rust Grave pairing wins by making decay contagious across the entire threat set before the first stage resolves.",
+    missionUse:
+      "Best in dense threat environments where the cascade effect amplifies as threat count increases.",
+    finisherName: "Entropy Cascade",
+    actions: [
+      { id: "light", label: "Rust Touch", summary: "Applies a decay stack to the target." },
+      { id: "heavy", label: "Grave Strike", summary: "High-damage hit that applies three decay stacks and strips one defense layer." },
+      { id: "dodge", label: "Entropy Step", summary: "Steps out of the decay zone without triggering spread." },
+      { id: "bond", label: "Cascade Seed", summary: "RUST-2 makes the next decay stack contagious — it spreads to the two nearest threats on detonation." },
+      { id: "finisher", label: "Entropy Cascade", summary: "Strips all defense layers from all threats and triggers all active decay stacks simultaneously." },
+    ],
+  },
+  {
+    id: "neon-phantom",
+    name: "Ghost Signal Rig + NEON-3",
+    subtitle: "Signal-phantom pairing that operates entirely off the threat tracking grid",
+    element: "neon",
+    loadoutId: "neon-phantom-loadout",
+    companionId: "frac-3",
+    combatIdentity:
+      "Become the false signal. Every threat is tracking something that is not there. Strike from the gap between the signal and the reality.",
+    missionUse:
+      "Best against heavily coordinated enemies where breaking targeting chains prevents their most dangerous coordinated attacks.",
+    finisherName: "Phantom Field Collapse",
+    actions: [
+      { id: "light", label: "Ghost Ping", summary: "Creates a false signal that misdirects the target's next action." },
+      { id: "heavy", label: "Phantom Strike", summary: "Hits from a position the target's tracking system shows as empty." },
+      { id: "dodge", label: "Signal Slip", summary: "Drops from all tracking entirely for one window." },
+      { id: "bond", label: "Full Phantom", summary: "NEON-3 activates the full phantom field, removing the pair from all tracking systems simultaneously." },
+      { id: "finisher", label: "Phantom Field Collapse", summary: "Collapses the phantom field inward, causing all misdirected threats to hit each other." },
+    ],
+  },
+  {
+    id: "dusk-wraith",
+    name: "Twilight Stalker Kit + DUSK-4",
+    subtitle: "Twilight-stalker pairing that strikes in the gap between decision and execution",
+    element: "dusk",
+    loadoutId: "dusk-wraith-loadout",
+    companionId: "frac-4",
+    combatIdentity:
+      "Every threat has a half-second between the moment it decides to act and the moment it acts. The Dusk Wraith pairing owns that half-second.",
+    missionUse:
+      "Best against high-speed enemies whose primary advantage is reaction time — this pairing removes that advantage entirely.",
+    finisherName: "Dusk Window Execution",
+    actions: [
+      { id: "light", label: "Dusk Tag", summary: "Marks the target's action timing for exploitation." },
+      { id: "heavy", label: "Wraith Strike", summary: "Hits in the timing gap, striking before the target's action can resolve." },
+      { id: "dodge", label: "Twilight Step", summary: "Enters the dusk window and steps through the enemy's attack before it fires." },
+      { id: "bond", label: "Dusk Alignment", summary: "DUSK-4 aligns the pair's timing with all active threats' decision windows simultaneously." },
+      { id: "finisher", label: "Dusk Window Execution", summary: "Strikes all active threats simultaneously in their individual timing gaps before any can respond." },
+    ],
+  },
+  // Phase 14 — Cross-faction
+  {
+    id: "arc-prism",
+    name: "Multi-Element Rig + ARC-1",
+    subtitle: "Cross-faction bridge pairing that renders every finisher in two elements simultaneously",
+    element: "arc",
+    loadoutId: "arc-prism-loadout",
+    companionId: "cross-1",
+    combatIdentity:
+      "Every finisher hits two weaknesses at once. ARC-1 reads the field and picks the second element automatically. The pair always has the right answer.",
+    missionUse:
+      "Best in cross-faction missions where the enemy roster spans multiple elemental weaknesses that a single-element pairing cannot cover.",
+    finisherName: "Dual Element Render",
+    actions: [
+      { id: "light", label: "Arc Scan", summary: "Scans the target for secondary elemental weakness." },
+      { id: "heavy", label: "Prism Hit", summary: "Hits with primary element and marks the target for dual rendering." },
+      { id: "dodge", label: "Arc Step", summary: "Steps across the elemental boundary, changing the pair's current element affinity." },
+      { id: "bond", label: "Element Lock", summary: "ARC-1 identifies and locks the optimal second element for the current threat set." },
+      { id: "finisher", label: "Dual Element Render", summary: "Executes the next finisher in both native and secondary element simultaneously." },
+    ],
+  },
+  {
+    id: "ion-null",
+    name: "Suppression Array + ION-2",
+    subtitle: "Faction-stripper pairing that removes enemy defensive bonuses before engaging",
+    element: "ion",
+    loadoutId: "ion-null-loadout",
+    companionId: "cross-2",
+    combatIdentity:
+      "Strip the faction identity first. Once neutralized, every threat fights as an isolated individual with no coordination bonuses. Then finish them one by one.",
+    missionUse:
+      "Best against faction-coordinated enemy sets where each unit has defensive bonuses that only apply while faction cohesion is intact.",
+    finisherName: "Faction Null Protocol",
+    actions: [
+      { id: "light", label: "Ion Tag", summary: "Tags the target for faction identity suppression." },
+      { id: "heavy", label: "Null Strike", summary: "Hits the target and removes its current faction defensive bonus for two windows." },
+      { id: "dodge", label: "Ion Step", summary: "Steps through the ion field, gaining immunity to faction-based targeting for one window." },
+      { id: "bond", label: "Faction Scan", summary: "ION-2 scans all threats in the zone and identifies their faction bonus sources." },
+      { id: "finisher", label: "Faction Null Protocol", summary: "Strips all faction bonuses from all threats in the zone simultaneously for the rest of the stage." },
+    ],
+  },
+  {
+    id: "grav-forge",
+    name: "Gravity Anchor Rig + GRAV-3",
+    subtitle: "Gravity-forger pairing that makes position irrelevant and every action an area hit",
+    element: "grav",
+    loadoutId: "grav-forge-loadout",
+    companionId: "cross-3",
+    combatIdentity:
+      "Compress the field. Every action hits everything. GRAV-3 makes the pair's position the center of gravity for the entire mission zone.",
+    missionUse:
+      "Best in spread-out enemy configurations where positional gap between threats would normally require multiple actions to cover.",
+    finisherName: "Field Gravity Compression",
+    actions: [
+      { id: "light", label: "Grav Pulse", summary: "Pulls all threats slightly toward the pair's position." },
+      { id: "heavy", label: "Forge Impact", summary: "Heavy hit that anchors the pair's gravity field to the current position." },
+      { id: "dodge", label: "Mass Step", summary: "Uses the gravity field to accelerate the dodge, gaining extra distance." },
+      { id: "bond", label: "Field Compress", summary: "GRAV-3 compresses the field so the pair's next three actions each hit all threats regardless of position." },
+      { id: "finisher", label: "Field Gravity Compression", summary: "Makes the pair's position the permanent gravity center — all subsequent actions in the mission hit all threats." },
+    ],
+  },
+  {
+    id: "mirror-fracture",
+    name: "Inversion Frame + MIRROR-4",
+    subtitle: "Attack-inverter pairing that turns the strongest incoming threats into the pair's best weapons",
+    element: "mirror",
+    loadoutId: "mirror-fracture-loadout",
+    companionId: "cross-4",
+    combatIdentity:
+      "Read what they are going to do. Fracture it before it lands. Return it five times stronger from five directions simultaneously.",
+    missionUse:
+      "Best against enemies with high single-hit damage where converting the biggest threat into a returning weapon is more effective than absorbing it.",
+    finisherName: "Fracture Mirror Volley",
+    actions: [
+      { id: "light", label: "Mirror Read", summary: "Reads the target's next attack and begins fracture preparation." },
+      { id: "heavy", label: "Inversion Strike", summary: "Returns part of the incoming attack force back at the target." },
+      { id: "dodge", label: "Fracture Step", summary: "Steps into the attack's fracture point, splitting the damage and adding it to the return stack." },
+      { id: "bond", label: "Mirror Align", summary: "MIRROR-4 aligns all fracture planes for the maximum return volley count." },
+      { id: "finisher", label: "Fracture Mirror Volley", summary: "Fractures the next two incoming attacks and returns each as five simultaneous strikes from five angles." },
+    ],
+  },
 ];
 
 export const missionFlows: MissionFlow[] = [
@@ -930,37 +1283,41 @@ export const missionFlows: MissionFlow[] = [
       },
       {
         id: "warmachine-containment",
-        title: "Contain The Warmachine Bay",
-        objective: "Hold the bay entrance long enough for the Concord to confirm the restart signal is fully dead.",
+        title: "OVERLORD-SIGMA: The Architect of Silence",
+        objective:
+          "Defeat OVERLORD-SIGMA before it completes the warmachine bay restart and locks the Iron Citadel into permanent active war mode.",
         narrative:
-          "Even without the signal, one of the older warmachine units has started cycling up on residual protocols. The pair is the only thing standing between a dark fortress and a war the frontier cannot afford.",
-        enemyName: "Residual Warmachine Vanguard",
-        enemyIntegrity: 92,
-        enemyPressure: 20,
-        environment: "Warmachine bay power surges, residual activation arcs, and reinforced containment bulkheads.",
+          "OVERLORD-SIGMA was the citadel's original command intelligence before the leadership protocol war. It did not go dark. It went silent on purpose — waiting for a pair strong enough to deserve the test. The warmachine restart was a summons, not an accident.",
+        enemyName: "OVERLORD-SIGMA — Architect of Silence",
+        enemyIntegrity: 130,
+        enemyPressure: 26,
+        environment:
+          "Warmachine bay epicenter, phase-lock field actively mirroring the pair's current element, layered command-crystal shielding, and OVERLORD-SIGMA's own bonded warmachine vanguard standing at attention.",
         telegraph: {
-          name: "Vanguard Charge",
-          cue: "The warmachine vanguard locks its main drive and commits to a full bay-clearing charge that would end the containment permanently.",
+          name: "Phase-Mirror Lock",
+          cue:
+            "OVERLORD-SIGMA activates its phase-mirror field — it reads the pair's current element and reflects their next three attacks directly back at them at double force.",
           counterplay:
-            "Match the charge with overwhelming force or redirect the warmachine's own momentum into the bay structure.",
-          surgePressure: 7,
-          reactionElement: "storm",
-          reactionName: "Arc Seizure",
+            "Break the mirror before three attacks land, or trigger the bond burst to shatter the reflection and expose OVERLORD-SIGMA's core during the two-second fracture window. A successful burst converts the reflected force into bonus finisher damage.",
+          surgePressure: 10,
+          reactionElement: "phase",
+          reactionName: "Mirror Shatter",
           reactionOutcome:
-            "Storm force seizes the warmachine's drive mid-charge and collapses the activation arc back through its own core.",
-          reactionBonusDamage: 18,
+            "Phase force cracks the mirror field along its primary resonance axis. OVERLORD-SIGMA's own reflection collapses inward, exposing the command core and dealing the reflected force back at the source.",
+          reactionBonusDamage: 28,
         },
-        rewardText: "Bay secured. The Concord confirmation comes through and the warmachines stay dark.",
+        rewardText:
+          "OVERLORD-SIGMA stands down. The warmachine bay holds dark. Before it goes fully offline it says: 'Record kept. You are the first pair the Citadel will remember.' The frontier just changed.",
       },
     ],
     completionNarrative:
-      "The warmachine bay holds dark. The Concord confirmation clears the channel and the pair walks out of the Iron Citadel with the kind of record that makes every other faction on the frontier reconsider what a bonded pair is actually capable of.",
+      "OVERLORD-SIGMA is not destroyed. It chose to stand down — something no Dominion warmachine intelligence has ever done voluntarily. The Concord confirmation clears the channel and the pair walks out of the Iron Citadel with a record that makes every other faction reconsider what a bonded pair is actually capable of. The frontier's first named AI warlord just acknowledged a human-AI pair as a legitimate force. That message propagates faster than any weapon.",
     completionRewards: {
-      explorerRank: 2,
-      humanLevel: 1,
-      aiTier: 1,
-      resonanceLevel: 2,
-      factionStanding: 40,
+      explorerRank: 3,
+      humanLevel: 2,
+      aiTier: 2,
+      resonanceLevel: 3,
+      factionStanding: 75,
     },
     nextMissionId: null,
   },

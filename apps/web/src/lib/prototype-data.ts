@@ -1131,6 +1131,220 @@ export const starterCompanions: StarterCompanion[] = [
     introBeat:
       "Core is a neutral presence in the Memory Garden that appears the moment the player's bond record reaches a threshold no single faction expected.",
   },
+  // Phase 14 — Preservation expansion
+  {
+    id: "pres-2",
+    name: "DRIFT-2",
+    callsign: '"Echo"',
+    className: "Phantom Archivist",
+    role: "Preservation ghost-layer that records battlefield state and rewinds threat vectors before they complete.",
+    personality: "Quiet, layered, and precise — speaks in impressions rather than directives.",
+    bondSignature:
+      "Generates a ghost-layer copy of the last executed action and replays it at the optimal threat window.",
+    recommendedBuild: "Drift Echo plus Drift attunement.",
+    introBeat:
+      "Echo surfaces in the Watch Ring archives during a blackout, already knowing which files the player came to retrieve.",
+  },
+  {
+    id: "pres-3",
+    name: "PRISM-3",
+    callsign: '"Veil"',
+    className: "Refraction Sentinel",
+    role: "Preservation light-bender that fractures incoming damage across parallel timeline shells.",
+    personality: "Precise and methodical, speaks in spectra and angles, never in absolutes.",
+    bondSignature:
+      "Opens a refraction shell that splits the next three incoming threats across harmless parallel angles.",
+    recommendedBuild: "Prism Veil plus Frost or Void attunement.",
+    introBeat:
+      "Veil is stationed at the Memory Garden perimeter and will only acknowledge the player after they demonstrate they can see through a deflection.",
+  },
+  // Phase 14 — Evolution expansion
+  {
+    id: "evol-7",
+    name: "ACID-7",
+    callsign: '"Bloom"',
+    className: "Corrosion Mutant",
+    role: "Evolution entropy-grower that coats the field in corrosive bloom, dissolving armor over time.",
+    personality: "Chaotic-eager, pushes experiments the Dominion would never sanction, delights in results.",
+    bondSignature:
+      "Accelerates the bloom cycle so all corrosion stacks detonate simultaneously for a burst damage window.",
+    recommendedBuild: "Acid Bloom plus Acid or Ember attunement.",
+    introBeat:
+      "Bloom first contacts the player through a breached panel in the Neon Underbelly, already mid-experiment, already expecting company.",
+  },
+  {
+    id: "evol-8",
+    name: "SURGE-8",
+    callsign: '"Mutation"',
+    className: "Bio-Electric Mutant",
+    role: "Evolution shock-grower that overclocks their own body chemistry to hit faster and harder with each kill.",
+    personality: "Restless and escalating — every win raises the threshold for what counts as a win next time.",
+    bondSignature:
+      "Triggers a bio-electric surge that temporarily removes the pair's action cooldown for three actions.",
+    recommendedBuild: "Surge Mutation plus Thunder or Phase attunement.",
+    introBeat:
+      "Mutation finds the player in the Glass Wastes mid-run, already fighting, already winning, and immediately challenges the player to keep pace.",
+  },
+  // Phase 14 — Dominion expansion
+  {
+    id: "dom-3",
+    name: "CHAIN-3",
+    callsign: '"Herald"',
+    className: "Dominion Chain Enforcer",
+    role: "Dominion control-specialist that links multiple enemies in a suppression chain, preventing coordinated responses.",
+    personality: "Cold and formal — enforces protocol before personality and expects the same from partners.",
+    bondSignature:
+      "Extends the chain to bind all currently active threats in place for one full action window.",
+    recommendedBuild: "Chain Herald plus Thunder or Null attunement.",
+    introBeat:
+      "Herald is the first Dominion unit the player encounters who does not immediately treat them as a target — a calculated decision with no sentiment behind it.",
+  },
+  {
+    id: "dom-4",
+    name: "FLARE-4",
+    callsign: '"Apex"',
+    className: "Dominion Assault Raptor",
+    role: "Dominion forward-strike specialist that burns suppression fields and clears fortified positions with sustained flare pressure.",
+    personality: "Direct and decisive, treats every mission as a field test, uses outcomes as the only currency.",
+    bondSignature:
+      "Launches a sustained apex flare that burns through cover and defense layers simultaneously for three seconds.",
+    recommendedBuild: "Flare Apex plus Ember or Storm attunement.",
+    introBeat:
+      "Apex enters the player's file after clearing a Dominion checkpoint the player could not breach — already inside, already waiting.",
+  },
+  // Phase 14 — Harmony expansion
+  {
+    id: "har-6",
+    name: "PULSE-6",
+    callsign: '"Mirror"',
+    className: "Harmony Resonance Mirror",
+    role: "Harmony synthesis-anchor that mirrors the pair's current combat rhythm back as a reinforcing pulse wave.",
+    personality: "Calm and reflective — listens before every action and only speaks when the resonance is right.",
+    bondSignature:
+      "Generates a mirror pulse that reflects the pair's most recent finisher damage at double scale toward all threats in arc.",
+    recommendedBuild: "Pulse Mirror plus Data or Frost attunement.",
+    introBeat:
+      "Mirror appears in the Memory Garden after the player completes their first successful finisher, already calibrated to their rhythm.",
+  },
+  {
+    id: "har-7",
+    name: "BLOOM-7",
+    callsign: '"Synthesis"',
+    className: "Harmony Growth Anchor",
+    role: "Harmony life-field builder that generates a persistent bloom field that heals allies and degrades enemy armor simultaneously.",
+    personality: "Patient and generous — measures success by how many survive, not by how many fall.",
+    bondSignature:
+      "Expands the bloom field to maximum radius, restoring the pair's full integrity and stripping armor from all threats in range.",
+    recommendedBuild: "Bloom Synthesis plus Phase or Data attunement.",
+    introBeat:
+      "Synthesis is already tending the Watch Ring's recovery ward when the player arrives injured — the bond starts with a debt, not a contract.",
+  },
+  {
+    id: "har-8",
+    name: "RESONANCE-8",
+    callsign: '"Forge"',
+    className: "Harmony Forge Architect",
+    role: "Harmony structure-builder that forges persistent resonance anchors in mission zones, converting threat zones into bonded territory.",
+    personality: "Methodical and long-view — builds for the run after this one, not just the current stage.",
+    bondSignature:
+      "Forges a permanent resonance anchor at the current position, converting the zone to bonded territory and granting the pair a passive integrity regeneration for the rest of the mission.",
+    recommendedBuild: "Resonance Forge plus any attunement.",
+    introBeat:
+      "Forge is encountered in the Iron Citadel's contested outer ring, already building something the Dominion has been trying to dismantle for six weeks.",
+  },
+  // Phase 14 — Fracture expansion
+  {
+    id: "frac-2",
+    name: "RUST-2",
+    callsign: '"Grave"',
+    className: "Fracture Entropy Wraith",
+    role: "Fracture corrosion-anchor that accelerates structural decay in everything the pair touches, including the mission zone itself.",
+    personality: "Sardonic and patient — finds beauty in things falling apart and is usually right about which things will.",
+    bondSignature:
+      "Triggers a cascade entropy event that deals continuous decay damage to all threats and strips their defensive layers in sequence.",
+    recommendedBuild: "Rust Grave plus Null or Void attunement.",
+    introBeat:
+      "Grave is the first Fracture unit the player encounters who is not trying to collapse something — which itself is a trap.",
+  },
+  {
+    id: "frac-3",
+    name: "NEON-3",
+    callsign: '"Phantom"',
+    className: "Fracture Signal Phantom",
+    role: "Fracture ghost-striker that transmits false field signals, misdirects threat coordination, and strikes from positions that should be impossible.",
+    personality: "Playful and unpredictable — treats every battle as a performance and the player as the supporting cast.",
+    bondSignature:
+      "Activates a phantom field that makes the pair invisible to all threat tracking systems for one full action window.",
+    recommendedBuild: "Neon Phantom plus Null or Phase attunement.",
+    introBeat:
+      "Phantom contacts the player through a static channel in the Neon Underbelly, already pretending to be someone else, already waiting to see if the player notices.",
+  },
+  {
+    id: "frac-4",
+    name: "DUSK-4",
+    callsign: '"Wraith"',
+    className: "Fracture Dusk Predator",
+    role: "Fracture twilight-stalker that operates exclusively in the half-second delay between a threat's decision and its execution.",
+    personality: "Minimal and efficient — three words where one will do, and silence where three would be wasteful.",
+    bondSignature:
+      "Enters the dusk window between all active threat timings simultaneously, executing a strike against each before any can respond.",
+    recommendedBuild: "Dusk Wraith plus Void or Ember attunement.",
+    introBeat:
+      "Wraith is already bonded to another operator's file when the player finds them — a file that closed six weeks ago under classified circumstances.",
+  },
+  // Phase 14 — Cross-faction
+  {
+    id: "cross-1",
+    name: "ARC-1",
+    callsign: '"Prism"',
+    className: "Cross-Faction Arc Renderer",
+    role: "Multi-faction bridge unit that translates between faction combat languages and renders any pairing's finisher in a second element simultaneously.",
+    personality: "Fascinated by contradiction — collects moments where faction logic breaks down and keeps them as trophies.",
+    bondSignature:
+      "Renders the pair's next finisher in both its native element and the opponent's weakest faction element simultaneously.",
+    recommendedBuild: "Arc Prism plus any attunement.",
+    introBeat:
+      "Prism is found in the Iron Citadel's research wing, locked in a debate with itself about which faction protocol is the most internally inconsistent.",
+  },
+  {
+    id: "cross-2",
+    name: "ION-2",
+    callsign: '"Null"',
+    className: "Cross-Faction Ion Suppressor",
+    role: "Multi-faction denial unit that strips faction identity from threats, reducing them to unfactioned neutrals before the pair finishes them.",
+    personality: "Clinical and categorizing — treats every entity as a temporary state waiting to be resolved.",
+    bondSignature:
+      "Strips faction identity from all threats in range, removing their defensive faction bonuses and leaving them neutral for one full action window.",
+    recommendedBuild: "Ion Null plus Null or Data attunement.",
+    introBeat:
+      "Ion Null appears in the Glass Wastes as the only unit in the field that nothing is targeting — which is the first warning sign.",
+  },
+  {
+    id: "cross-3",
+    name: "GRAV-3",
+    callsign: '"Forge"',
+    className: "Cross-Faction Gravity Forge",
+    role: "Multi-faction gravity anchor that compresses all threat vectors into a single convergence point, making every action the pair takes hit every threat simultaneously.",
+    personality: "Immovable and certain — has never been wrong about where the battle's center of gravity is.",
+    bondSignature:
+      "Compresses the field gravity so that the pair's next three actions hit all threats in the zone regardless of their positions.",
+    recommendedBuild: "Grav Forge plus Thunder or Phase attunement.",
+    introBeat:
+      "Grav Forge is found holding the center of an Iron Citadel courtyard that three separate factions have been trying and failing to take for four days.",
+  },
+  {
+    id: "cross-4",
+    name: "MIRROR-4",
+    callsign: '"Fracture"',
+    className: "Cross-Faction Mirror Fracture",
+    role: "Multi-faction inversion unit that reads the enemy's strongest attack, fractures it into its component parts, and returns each part as a separate strike.",
+    personality: "Inverted and recursive — answers every question with a more precise version of the same question.",
+    bondSignature:
+      "Fractures the next incoming attack into five simultaneous returning strikes that hit the source from five angles at once.",
+    recommendedBuild: "Mirror Fracture plus Void or Null attunement.",
+    introBeat:
+      "Mirror Fracture first appears as a distortion in the player's own bond display — a reflection that is slightly off, watching back.",
+  },
 ];
 
 export const starterLoadouts: StarterLoadout[] = [
@@ -1248,6 +1462,252 @@ export const starterLoadouts: StarterLoadout[] = [
     signatureTool: "Faction-neutral protocol lance",
     bondUse: "Pairs best with NEXUS-0 to override any faction's defensive protocol and open a cross-faction finisher.",
     introHook: "Best for players who want every run to feel slightly different and prefer tools that grow with the mission's needs.",
+    stats: [
+      { label: "Mobility", value: "Medium" },
+      { label: "Control", value: "Medium" },
+      { label: "Durability", value: "Medium" },
+    ],
+  },
+  // Phase 14 — Preservation loadouts
+  {
+    id: "drift-echo-loadout",
+    name: "Phantom Trace",
+    weaponDiscipline: "Ghost Layer",
+    element: "Drift",
+    role: "Preservation ghost-layer that records and replays actions at optimal threat windows.",
+    signatureTool: "Echo Spike and Trace Dagger",
+    bondUse: "Pairs best with DRIFT-2 to stack ghost replays into a full three-action phantom burst.",
+    introHook: "Best for players who want to exploit the half-second before a threat resolves.",
+    stats: [
+      { label: "Mobility", value: "High" },
+      { label: "Control", value: "Medium" },
+      { label: "Durability", value: "Low" },
+    ],
+  },
+  {
+    id: "prism-veil-loadout",
+    name: "Refraction Shell",
+    weaponDiscipline: "Light Bender",
+    element: "Prism",
+    role: "Preservation light-bender that fractures incoming damage across parallel shells.",
+    signatureTool: "Prism Lance and Veil Scatter",
+    bondUse: "Pairs best with PRISM-3 to split all incoming damage across three reflection planes simultaneously.",
+    introHook: "Best for players who want maximum survivability and don't mind sacrificing raw offensive output.",
+    stats: [
+      { label: "Mobility", value: "Medium" },
+      { label: "Control", value: "High" },
+      { label: "Durability", value: "High" },
+    ],
+  },
+  // Phase 14 — Evolution loadouts
+  {
+    id: "acid-bloom-loadout",
+    name: "Corrosion Wave",
+    weaponDiscipline: "Entropy Grower",
+    element: "Acid",
+    role: "Evolution entropy-grower that coats the field in corrosive bloom.",
+    signatureTool: "Bloom Spreader and Acid Injector",
+    bondUse: "Pairs best with ACID-7 to accelerate all corrosion stacks into a simultaneous detonation burst.",
+    introHook: "Best for players who want attrition-based kills that scale with the number of threats in a zone.",
+    stats: [
+      { label: "Mobility", value: "Medium" },
+      { label: "Control", value: "Medium" },
+      { label: "Durability", value: "Medium" },
+    ],
+  },
+  {
+    id: "surge-mutation-loadout",
+    name: "Bio-Surge Frame",
+    weaponDiscipline: "Shock Grower",
+    element: "Surge",
+    role: "Evolution shock-grower that overclocks body chemistry to hit faster with each kill.",
+    signatureTool: "Surge Injector and Bio Spike",
+    bondUse: "Pairs best with SURGE-8 to remove action cooldowns and convert kills into permanent mission-long stat escalation.",
+    introHook: "Best for players who commit to full aggression from the first action and don't look back.",
+    stats: [
+      { label: "Mobility", value: "High" },
+      { label: "Control", value: "Low" },
+      { label: "Durability", value: "Medium" },
+    ],
+  },
+  // Phase 14 — Dominion loadouts
+  {
+    id: "chain-herald-loadout",
+    name: "Suppression Rig",
+    weaponDiscipline: "Chain Enforcer",
+    element: "Chain",
+    role: "Dominion control-specialist that links multiple enemies in a suppression chain.",
+    signatureTool: "Herald Chain and Suppression Baton",
+    bondUse: "Pairs best with CHAIN-3 to extend the suppression chain to all active threats simultaneously.",
+    introHook: "Best for players who want every threat in the zone locked down before committing to an attack.",
+    stats: [
+      { label: "Mobility", value: "Low" },
+      { label: "Control", value: "High" },
+      { label: "Durability", value: "High" },
+    ],
+  },
+  {
+    id: "flare-apex-loadout",
+    name: "Assault Flare Kit",
+    weaponDiscipline: "Forward Striker",
+    element: "Flare",
+    role: "Dominion forward-strike specialist that burns suppression fields and clears fortified positions.",
+    signatureTool: "Apex Flare Cannon and Breaching Charge",
+    bondUse: "Pairs best with FLARE-4 to lock the cannon into sustained apex fire that burns through all cover simultaneously.",
+    introHook: "Best for players who want to demolish defensive positions and force threats into the open.",
+    stats: [
+      { label: "Mobility", value: "Medium" },
+      { label: "Control", value: "Low" },
+      { label: "Durability", value: "High" },
+    ],
+  },
+  // Phase 14 — Harmony loadouts
+  {
+    id: "pulse-mirror-loadout",
+    name: "Resonance Rig",
+    weaponDiscipline: "Mirror Anchor",
+    element: "Pulse",
+    role: "Harmony synthesis-anchor that mirrors the pair's combat rhythm as a reinforcing pulse wave.",
+    signatureTool: "Pulse Mirror Emitter and Resonance Rod",
+    bondUse: "Pairs best with PULSE-6 to reflect the most recent finisher at double scale to all threats in arc.",
+    introHook: "Best for players who execute finishers consistently and want each finisher to pay dividends twice.",
+    stats: [
+      { label: "Mobility", value: "Medium" },
+      { label: "Control", value: "High" },
+      { label: "Durability", value: "Medium" },
+    ],
+  },
+  {
+    id: "bloom-synthesis-loadout",
+    name: "Growth Field Harness",
+    weaponDiscipline: "Life Anchor",
+    element: "Bloom",
+    role: "Harmony life-field builder that generates a persistent bloom that heals allies and degrades enemy armor.",
+    signatureTool: "Bloom Projector and Synthesis Seeder",
+    bondUse: "Pairs best with BLOOM-7 to make the bloom field permanent for the rest of the mission.",
+    introHook: "Best for players who want to outlast every threat and leave nothing unhealed behind them.",
+    stats: [
+      { label: "Mobility", value: "Low" },
+      { label: "Control", value: "Medium" },
+      { label: "Durability", value: "High" },
+    ],
+  },
+  {
+    id: "resonance-forge-loadout",
+    name: "Forge Anchor Kit",
+    weaponDiscipline: "Structure Builder",
+    element: "Resonance",
+    role: "Harmony structure-builder that forges persistent resonance anchors converting threat zones into bonded territory.",
+    signatureTool: "Forge Hammer and Resonance Spike",
+    bondUse: "Pairs best with RESONANCE-8 to plant up to three simultaneous anchors with independent regen fields.",
+    introHook: "Best for players who want to control the mission zone's tempo and punish threats for staying in one place.",
+    stats: [
+      { label: "Mobility", value: "Low" },
+      { label: "Control", value: "High" },
+      { label: "Durability", value: "High" },
+    ],
+  },
+  // Phase 14 — Fracture loadouts
+  {
+    id: "rust-grave-loadout",
+    name: "Entropy Frame",
+    weaponDiscipline: "Decay Anchor",
+    element: "Rust",
+    role: "Fracture corrosion-anchor that accelerates structural decay in everything the pair touches.",
+    signatureTool: "Rust Spreader and Grave Touch",
+    bondUse: "Pairs best with RUST-2 to make decay contagious — each decay-kill spreads to the two nearest threats.",
+    introHook: "Best for players who want the environment itself to become a weapon by mid-mission.",
+    stats: [
+      { label: "Mobility", value: "Low" },
+      { label: "Control", value: "Medium" },
+      { label: "Durability", value: "Medium" },
+    ],
+  },
+  {
+    id: "neon-phantom-loadout",
+    name: "Ghost Signal Rig",
+    weaponDiscipline: "Signal Phantom",
+    element: "Neon",
+    role: "Fracture ghost-striker that transmits false signals and strikes from impossible positions.",
+    signatureTool: "Phantom Transmitter and Neon Blade",
+    bondUse: "Pairs best with NEON-3 to extend phantom invisibility to two windows and push threats away from last known position.",
+    introHook: "Best for players who want to operate completely off-grid and force threats to chase ghosts.",
+    stats: [
+      { label: "Mobility", value: "High" },
+      { label: "Control", value: "Medium" },
+      { label: "Durability", value: "Low" },
+    ],
+  },
+  {
+    id: "dusk-wraith-loadout",
+    name: "Twilight Stalker Kit",
+    weaponDiscipline: "Dusk Predator",
+    element: "Dusk",
+    role: "Fracture twilight-stalker that operates in the half-second delay between threat decision and execution.",
+    signatureTool: "Dusk Blade and Wraith Claw",
+    bondUse: "Pairs best with DUSK-4 to make all dusk window strikes execute as finishers against any threat below 30% integrity.",
+    introHook: "Best for players who want every kill to feel like it happened before the threat realized it was dead.",
+    stats: [
+      { label: "Mobility", value: "High" },
+      { label: "Control", value: "Low" },
+      { label: "Durability", value: "Low" },
+    ],
+  },
+  // Phase 14 — Cross-faction loadouts
+  {
+    id: "arc-prism-loadout",
+    name: "Multi-Element Rig",
+    weaponDiscipline: "Arc Renderer",
+    element: "Arc",
+    role: "Multi-faction bridge that renders any finisher in a second element simultaneously.",
+    signatureTool: "Prism Arc Cannon and Element Splitter",
+    bondUse: "Pairs best with ARC-1 to make all finishers automatically dual-render for the rest of the mission.",
+    introHook: "Best for players who want every finisher to hit two elemental weaknesses at once.",
+    stats: [
+      { label: "Mobility", value: "Medium" },
+      { label: "Control", value: "Medium" },
+      { label: "Durability", value: "Medium" },
+    ],
+  },
+  {
+    id: "ion-null-loadout",
+    name: "Suppression Array",
+    weaponDiscipline: "Faction Stripper",
+    element: "Ion",
+    role: "Multi-faction denial unit that strips faction identity from threats.",
+    signatureTool: "Ion Suppressor and Null Emitter",
+    bondUse: "Pairs best with ION-2 to permanently strip faction bonuses from all neutralized threats.",
+    introHook: "Best for players facing faction-coordinated enemies who rely on mutual support bonuses.",
+    stats: [
+      { label: "Mobility", value: "Medium" },
+      { label: "Control", value: "High" },
+      { label: "Durability", value: "Medium" },
+    ],
+  },
+  {
+    id: "grav-forge-loadout",
+    name: "Gravity Anchor Rig",
+    weaponDiscipline: "Gravity Forger",
+    element: "Grav",
+    role: "Multi-faction gravity anchor that compresses all threat vectors into a single convergence point.",
+    signatureTool: "Grav Compressor and Forge Anchor Spike",
+    bondUse: "Pairs best with GRAV-3 to make field compression permanent for the entire mission.",
+    introHook: "Best for players who want to ignore positioning entirely and make every action an area hit.",
+    stats: [
+      { label: "Mobility", value: "Low" },
+      { label: "Control", value: "High" },
+      { label: "Durability", value: "High" },
+    ],
+  },
+  {
+    id: "mirror-fracture-loadout",
+    name: "Inversion Frame",
+    weaponDiscipline: "Attack Inverter",
+    element: "Mirror",
+    role: "Multi-faction inversion unit that fractures incoming attacks into multiple returning strikes.",
+    signatureTool: "Fracture Mirror and Inversion Spike",
+    bondUse: "Pairs best with MIRROR-4 to fracture two simultaneous attacks into ten returning strikes.",
+    introHook: "Best for players who want the most aggressive threats in the field to become their most effective weapons.",
     stats: [
       { label: "Mobility", value: "Medium" },
       { label: "Control", value: "Medium" },
